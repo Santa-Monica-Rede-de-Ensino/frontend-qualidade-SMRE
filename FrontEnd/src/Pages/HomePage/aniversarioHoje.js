@@ -26,14 +26,13 @@ function gravar(armazenamento, chave, valor) {
     }
 }
 
-// Fora de produção, ?aniversario=1 liga a festa para conferir no beta; vale para a sessão toda.
-function forcado() {
-    if (emProducao) return false;
-    if (new URLSearchParams(window.location.search).get('aniversario') === '1') {
-        gravar(sessionStorage, CHAVE_FORCADO, true);
-    }
-    return ler(sessionStorage, CHAVE_FORCADO) === true;
+// Fora de produção, ?aniversario=1 liga a festa para conferir no beta, pela sessão toda. É lido quando o
+// app carrega porque, depois do login, a URL já perdeu o parâmetro.
+if (!emProducao && new URLSearchParams(window.location.search).get('aniversario') === '1') {
+    gravar(sessionStorage, CHAVE_FORCADO, true);
 }
+
+const forcado = () => !emProducao && ler(sessionStorage, CHAVE_FORCADO) === true;
 
 function valorInicial(cpf) {
     if (forcado()) return true;
