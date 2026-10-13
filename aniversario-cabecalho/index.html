@@ -154,7 +154,7 @@
   @keyframes chama { 0% { transform: scale(.85, .9) rotate(-6deg); } 100% { transform: scale(1.05, 1.1) rotate(6deg); } }
   .parabens { font-weight: 900; font-size: 1rem; white-space: nowrap; }
   .parabens .curto { display: none; }
-  .festa .parabens {
+  .festa .parabens, .festa.modo-a .p-ola.so-a {
     background: linear-gradient(100deg, var(--branco) 40%, var(--amarelo) 50%, var(--branco) 60%) 0 0 / 300% 100%;
     -webkit-background-clip: text; background-clip: text; color: transparent;
     animation: brilho 1.8s .3s ease-in-out 2 backwards;
@@ -251,7 +251,7 @@
     <button type="button" class="opcao" data-opcao="a" aria-pressed="true">
       <span class="opcao-letra">A</span>
       <strong>Confete na foto</strong>
-      <span>Confetes saem da foto, que ganha um contorno festivo e um selinho de festa no canto.</span>
+      <span>Confetes saem da foto, que ganha um contorno festivo e um selinho de festa no canto. A frase ganha o brilho da opção B.</span>
     </button>
     <button type="button" class="opcao" data-opcao="b" aria-pressed="false">
       <span class="opcao-letra">B</span>
