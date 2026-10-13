@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/frontend-qualidade-SMRE/tutorial-helpdesk/static/css/main.07864f52.css",
-    "main.js": "/frontend-qualidade-SMRE/tutorial-helpdesk/static/js/main.2d5727fd.js",
+    "main.js": "/frontend-qualidade-SMRE/tutorial-helpdesk/static/js/main.1f32e177.js",
     "static/js/27.04bd8310.chunk.js": "/frontend-qualidade-SMRE/tutorial-helpdesk/static/js/27.04bd8310.chunk.js",
     "static/media/logomarca.png": "/frontend-qualidade-SMRE/tutorial-helpdesk/static/media/logomarca.c3aa2d6442ba78913451.png",
     "static/media/SMRE_logo_negativo.png": "/frontend-qualidade-SMRE/tutorial-helpdesk/static/media/SMRE_logo_negativo.b4b54e646ce8d2d153b5.png",
@@ -10,6 +10,6 @@
   },
   "entrypoints": [
     "static/css/main.07864f52.css",
-    "static/js/main.2d5727fd.js"
+    "static/js/main.1f32e177.js"
   ]
 }
