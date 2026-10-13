@@ -103,7 +103,7 @@ function Menu({ foto, nome }) {
 
                             {(foto || nome) && (
                                 <div className="navbar-user-info">
-                                    <span className="navbar-user-greeting">{saudacao}</span>
+                                    <span className={confete ? 'navbar-user-greeting festa' : 'navbar-user-greeting'}>{saudacao}</span>
                                     <FotoUsuario
                                         fotoSrc={fotoSrc}
                                         nome={nome}

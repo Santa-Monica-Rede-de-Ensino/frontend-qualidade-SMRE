@@ -123,6 +123,20 @@
     100% { opacity: 0; transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) rotate(var(--r)) scale(1); }
 }
 
+/* Junto com o confete, um brilho amarelo passa pela saudação; no fim a faixa visível é toda branca */
+.navbar-user-greeting.festa {
+    background: linear-gradient(100deg, #FFFFFF 40%, #FFC94A 50%, #FFFFFF 60%) 0 0 / 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: aniversarioBrilho 1.8s 0.3s ease-in-out 2 backwards;
+}
+
+@keyframes aniversarioBrilho {
+    0% { background-position: 100% 0; }
+    100% { background-position: 0 0; }
+}
+
 @keyframes aniversarioSelo {
     0% { transform: scale(0); }
     100% { transform: scale(1); }
@@ -143,7 +157,8 @@
 
 @media (prefers-reduced-motion: reduce) {
     .navbar-aniversario-confetes { display: none; }
-    .navbar-user-foto.festa .navbar-aniversario-selo { animation: none; }
+    .navbar-user-foto.festa .navbar-aniversario-selo,
+    .navbar-user-greeting.festa { animation: none; }
 }
 
 /* Marca e Título */
