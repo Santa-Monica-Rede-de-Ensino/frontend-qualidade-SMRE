@@ -9,7 +9,7 @@ export const TOPICO = 'G&G - Desligamento e Contratação';
 const NOTA_REQUISICAO = "Preencha com 'Não aplicável' quando a reposição da vaga não atender ao requisito.";
 
 // O formulário é uma pilha de linhas: h = altura em % da cena (hCel quando o texto quebra no
-// celular) e larg = largura do campo em % da cena [computador, celular]. A rolagem só desloca a pilha.
+// celular); larg = largura do campo em % da cena [computador, celular]. Rolar desloca a pilha.
 const LINHAS = [
     { id: 'topo', tipo: 'topo', h: 13, hCel: 9 },
     { id: 'nav', tipo: 'nav', h: 7, hCel: 6 },
@@ -283,7 +283,7 @@ function valorPadrao(id, preenchido) {
     return Array.isArray(v) ? <Chips itens={v} /> : v;
 }
 
-// Lista aberta logo abaixo do campo; opção null vira uma barra cinza (opções que não importam).
+// Lista aberta logo abaixo do campo; opção null vira barra cinza (opção que não importa).
 export function ListaCsc({ de, opcoes, on, rolar, cel }) {
     const k = chave(cel);
     const l = achar(de, cel);
@@ -302,9 +302,9 @@ export function ListaCsc({ de, opcoes, on, rolar, cel }) {
 
 /**
  * Formulário do CSC rolado até `rolar` (% da cena).
- * ate: última linha já preenchida; anima: valores animados por linha (sobrepõem os preenchidos);
- * ocultaApos / revelaApos: esconde ou faz surgir as linhas depois desse id (antes de escolher o tópico).
- * inicio: só cabeçalho e menu (Página Principal); aperta: anima o clique em "Criar Ticket".
+ * ate: última linha já preenchida. anima: valores animados por linha, por cima dos preenchidos.
+ * ocultaApos / revelaApos: esconde ou faz surgir as linhas depois desse id (tópico vazio).
+ * inicio: só cabeçalho e menu (Página Principal). aperta: anima o clique em "Criar Ticket".
  */
 export function TelaCsc({ cel, rolar = 0, ate, anima = {}, ocultaApos, revelaApos, ativo = 'novo', inicio, aperta }) {
     const pilha = PILHA[chave(cel)];
