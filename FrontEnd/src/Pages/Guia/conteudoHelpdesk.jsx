@@ -33,7 +33,7 @@ export const TEMA_HELPDESK = {
                 expl: (
                     <>
                         Acesse o sistema <a href={LINK_CSC} target="_blank" rel="noopener noreferrer">Suporte CSC</a> e
-                        entre com o seu e-mail e senha. A opção fica no menu, logo abaixo do logo.
+                        entre com o seu e-mail e senha. A opção fica no menu, abaixo da logo.
                     </>
                 ),
                 ...ambos((cel) => (
@@ -45,7 +45,7 @@ export const TEMA_HELPDESK = {
             },
             {
                 acao: `Em “Tópico de ajuda”, escolha “${TOPICO}”.`,
-                expl: 'Ao escolher o tópico, os campos do pedido aparecem logo abaixo.',
+                expl: 'Ao selecionar este tópico, os campos da solicitação serão exibidos logo abaixo.',
                 ...ambos((cel) => (
                     <Video cel={cel} para={alvo('topico', 0, cel)}>
                         <TelaCsc cel={cel} revelaApos="topico" anima={{ topico: <Escolhe de={VAZIO_TOPICO}>{TOPICO}</Escolhe> }} />
@@ -54,8 +54,15 @@ export const TEMA_HELPDESK = {
                 )),
             },
             {
-                acao: 'Preencha o Título seguindo o título padrão.',
-                expl: `Informe a sigla da unidade, a modalidade do desligamento e o cargo. Exemplo: ${V.titulo}.`,
+                acao: 'Preencha o título conforme o padrão indicado.',
+                expl: (
+                    <>
+                        Informe a sigla da unidade, a modalidade do desligamento e o cargo, seguindo o padrão apresentado no
+                        vídeo.<br />
+                        Observação: Para a modalidade do desligamento, selecione uma das seguintes opções: Demissão
+                        Involuntária, Demissão Voluntária ou Experiência (45 ou 90 dias).
+                    </>
+                ),
                 ...ambos((cel) => {
                     const rolar = rolagem('solicitacao', 6, cel);
                     return (
@@ -96,7 +103,7 @@ export const TEMA_HELPDESK = {
             },
             {
                 acao: 'Escolha a iniciativa, o motivo do desligamento e o aviso prévio.',
-                expl: 'Se o colaborador fizer parte da CIPA, marque a caixinha “CIPA”.',
+                expl: 'Caso o colaborador faça parte da CIPA, marque a opção “CIPA”.',
                 ...ambos((cel) => {
                     const rolar = rolagem('cargo', 4, cel);
                     return (
@@ -111,14 +118,14 @@ export const TEMA_HELPDESK = {
                                     aviso: <Escolhe>{V.aviso}</Escolhe>,
                                 }}
                             />
-                            <ListaCsc cel={cel} rolar={rolar} de="iniciativa" opcoes={['— Selecionar —', 'Empresa', 'Funcionário']} on={1} />
+                            <ListaCsc cel={cel} rolar={rolar} de="iniciativa" opcoes={['— Selecionar —', 'Empresa', 'Funcionário']} on={2} />
                         </Video>
                     );
                 }),
             },
             {
                 acao: 'Informe se haverá reposição da vaga.',
-                expl: 'Se escolher “SIM”, preencha também a Requisição de Pessoal: tipo de vaga, tipo de contratação, indicação, cargo e horário.',
+                expl: 'Se escolher a opção “SIM”, você deverá preencher os dados nos formulários de Requisição. Caso escolha a opção “NÃO”, os campos também deverão ser preenchidos, utilizando “N/A” ou “Não aplicável”',
                 ...ambos((cel) => {
                     const rolar = rolagem('reposicao', 6, cel);
                     return (
@@ -142,8 +149,8 @@ export const TEMA_HELPDESK = {
                 }),
             },
             {
-                acao: 'Vaga de professor ou monitor? Preencha também os dados da disciplina.',
-                expl: 'Informe os dias da semana, o horário, a quantidade de tempos, as turmas, o segmento e a disciplina.',
+                acao: 'Vaga de Professor ou Monitor? Preencha também os dados solicitados no segundo formulário de Requisição.',
+                expl: 'Preencha todos os campos do formulário de Requisição de Pessoal – Professor e Monitor de Disciplina. Todos os campos são obrigatórios.',
                 ...ambos((cel) => {
                     const rolar = rolagem('professor', 4, cel);
                     return (
@@ -173,8 +180,8 @@ export const TEMA_HELPDESK = {
                 }),
             },
             {
-                acao: 'Para finalizar, clique em “Criar Ticket”.',
-                expl: 'Pronto! Você acompanha o andamento do seu pedido em “Tickets”, no menu do CSC.',
+                acao: 'Para concluir a solicitação, clique no botão “Criar Ticket”.',
+                expl: 'Pronto! Sua solicitação foi criada. Para acompanhar o andamento, acesse o menu “Tickets” no sistema Suporte CSC.',
                 ...ambos((cel) => {
                     const rolar = rolagem('botoes', 78, cel);
                     return (
