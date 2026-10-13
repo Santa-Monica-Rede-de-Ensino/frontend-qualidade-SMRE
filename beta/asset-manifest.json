@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/frontend-qualidade-SMRE/beta/static/css/main.ed261479.css",
-    "main.js": "/frontend-qualidade-SMRE/beta/static/js/main.bd55a1f3.js",
+    "main.css": "/frontend-qualidade-SMRE/beta/static/css/main.169bf031.css",
+    "main.js": "/frontend-qualidade-SMRE/beta/static/js/main.cb3ed6e0.js",
     "static/js/27.9b9280a3.chunk.js": "/frontend-qualidade-SMRE/beta/static/js/27.9b9280a3.chunk.js",
     "static/media/teste.jpg": "/frontend-qualidade-SMRE/beta/static/media/teste.ee9c25c6ee5da7f3e97c.jpg",
     "static/media/leozinho-avatar.png": "/frontend-qualidade-SMRE/beta/static/media/leozinho-avatar.c074ad0a33795792ebc2.png",
@@ -11,7 +11,7 @@
     "index.html": "/frontend-qualidade-SMRE/beta/index.html"
   },
   "entrypoints": [
-    "static/css/main.ed261479.css",
-    "static/js/main.bd55a1f3.js"
+    "static/css/main.169bf031.css",
+    "static/js/main.cb3ed6e0.js"
   ]
 }
