@@ -48,6 +48,104 @@
     font-family: 'Lato', sans-serif;
 }
 
+/* Aniversário de quem fez login: contorno festivo, selo e confete (o confete só na 1ª página da sessão) */
+.navbar-user-foto {
+    position: relative;
+    display: inline-flex;
+    flex: none;
+    border-radius: 50%;
+}
+
+.navbar-user-foto.aniversario::before {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    background: conic-gradient(#F5821F, #FFC94A, #FFFFFF, #F5821F);
+}
+
+.navbar-user-foto.aniversario > img,
+.navbar-user-foto.aniversario > .navbar-user-placeholder {
+    position: relative;
+}
+
+.navbar-aniversario-selo {
+    position: absolute;
+    right: -6px;
+    bottom: -4px;
+    z-index: 2;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #F5821F;
+    border: 2px solid #fff;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.navbar-aniversario-selo svg {
+    width: 14px;
+    height: 14px;
+}
+
+.navbar-user-foto.festa .navbar-aniversario-selo {
+    animation: aniversarioSelo 0.7s 0.9s cubic-bezier(0.3, 1.6, 0.5, 1) backwards;
+}
+
+.navbar-aniversario-confetes {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 0;
+    height: 0;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.navbar-aniversario-confetes i {
+    position: absolute;
+    width: 7px;
+    height: 11px;
+    border-radius: 2px;
+    opacity: 0;
+    background: var(--c);
+    transform: translate(-50%, -50%);
+    animation: aniversarioConfete 1.6s cubic-bezier(0.15, 0.7, 0.3, 1) forwards;
+    animation-delay: var(--d);
+}
+
+@keyframes aniversarioConfete {
+    0% { opacity: 0; transform: translate(-50%, -50%) rotate(0) scale(0.4); }
+    12% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) rotate(var(--r)) scale(1); }
+}
+
+@keyframes aniversarioSelo {
+    0% { transform: scale(0); }
+    100% { transform: scale(1); }
+}
+
+.navbar-aniversario-cel {
+    display: inline-flex;
+}
+
+/* Celular estreito no aniversário: o título quebra em duas linhas para a foto e o ☰ caberem ao lado */
+@media (max-width: 420px) {
+    .custom-navbar.aniversario-hoje .portal-title {
+        white-space: normal;
+        max-width: 9em;
+        line-height: 1.15;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .navbar-aniversario-confetes { display: none; }
+    .navbar-user-foto.festa .navbar-aniversario-selo { animation: none; }
+}
+
 /* Marca e Título */
 .brand-section {
     display: flex;
@@ -175,6 +273,27 @@
 
     .navbar-user-info {
         margin-right: 6px;
+    }
+
+    /* Sem a margem do Bootstrap na marca, a foto de aniversário e o ☰ cabem na mesma linha em 390px */
+    .custom-navbar .brand-section {
+        margin-right: 0;
+    }
+
+    .navbar-user-foto.aniversario::before {
+        inset: -3px;
+    }
+
+    .navbar-aniversario-selo {
+        width: 20px;
+        height: 20px;
+        right: -7px;
+        bottom: -5px;
+    }
+
+    .navbar-aniversario-selo svg {
+        width: 11px;
+        height: 11px;
     }
 
     /* Toggle — Bootstrap variant="dark" já torna o ícone branco */
