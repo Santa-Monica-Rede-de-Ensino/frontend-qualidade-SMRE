@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { PartyPopper, HeartPulse, FileText, Palmtree, Receipt, BadgeCheck, Phone, MonitorCheck, BookOpen } from 'lucide-react';
 import { emProducao } from '../../config/fase';
 import { linkEmConstrucao } from '../EmConstrucao/linkEmConstrucao';
+import { useAniversarioHoje, useConfeteDaSessao } from './aniversarioHoje';
 import './menu.css';
 
 import LogoNegativa from '../../img/Portal_Func/SMRE_logo_negativo.png';
@@ -23,16 +24,61 @@ const ITENS_MENU = [
 
 export const itensMenuVisiveis = () => ITENS_MENU.filter((botao) => !(emProducao && botao.ocultoEmProducao));
 
+const CORES_CONFETE = ['#F5821F', '#FFC94A', '#FFFFFF', '#00A6E4'];
+const CONFETES = Array.from({ length: 16 }, (_, i) => {
+    const angulo = (i / 16) * Math.PI * 2 + (i % 2 ? 0.2 : -0.1);
+    const distancia = 46 + (i % 3) * 14;
+    return {
+        '--x': `${Math.cos(angulo) * distancia}px`,
+        '--y': `${Math.sin(angulo) * distancia}px`,
+        '--r': `${(i % 2 ? 1 : -1) * (180 + i * 25)}deg`,
+        '--c': CORES_CONFETE[i % CORES_CONFETE.length],
+        '--d': `${(i % 4) * 0.05}s`,
+    };
+});
+
+const cpfLogado = () => {
+    try {
+        return JSON.parse(localStorage.getItem('user'))?.[0]?.cpf;
+    } catch {
+        return undefined;
+    }
+};
+
+function FotoUsuario({ fotoSrc, nome, aniversario, confete, decorativa, onErro }) {
+    const classe = `navbar-user-foto${aniversario ? ' aniversario' : ''}${confete ? ' festa' : ''}`;
+    return (
+        <span className={classe}>
+            {fotoSrc ? (
+                <img src={fotoSrc} alt={decorativa ? '' : 'Foto do colaborador'} className="navbar-user-avatar" onError={onErro} />
+            ) : (
+                <div className="navbar-user-placeholder">{nome ? nome.charAt(0) : ''}</div>
+            )}
+            {aniversario && (
+                <span className="navbar-aniversario-selo" aria-hidden="true"><PartyPopper strokeWidth={2.2} /></span>
+            )}
+            {confete && (
+                <span className="navbar-aniversario-confetes" aria-hidden="true">
+                    {CONFETES.map((estilo, i) => <i key={i} style={estilo} />)}
+                </span>
+            )}
+        </span>
+    );
+}
+
 function Menu({ foto, nome }) {
     const [fotoComErro, setFotoComErro] = useState(false);
     const fotoValida = typeof foto === 'string' && foto.length > 100 && !fotoComErro;
     const fotoSrc = fotoValida && (foto.startsWith('data:image') ? foto : `data:image/jpeg;base64,${foto}`);
+    const aniversario = useAniversarioHoje(cpfLogado());
+    const confete = useConfeteDaSessao(aniversario);
+    const saudacao = aniversario ? `Feliz Aniversário, ${nome}!` : `Olá, ${nome}!`;
 
     const botoes = itensMenuVisiveis();
 
     return (
         <>
-            <Navbar expand="lg" variant="dark" className="custom-navbar">
+            <Navbar expand="lg" variant="dark" className={aniversario ? 'custom-navbar aniversario-hoje' : 'custom-navbar'}>
                 <Container fluid className="navbar-container">
 
                     {/* Lado Esquerdo: Logo e Título conforme imagem de marketing */}
@@ -42,6 +88,13 @@ function Menu({ foto, nome }) {
                         <h2 className="portal-title">PORTAL DO COLABORADOR</h2>
                     </Navbar.Brand>
 
+                    {/* No celular a foto fica atrás do ☰; no aniversário, esta cópia aparece */}
+                    {aniversario && (
+                        <span className="navbar-aniversario-cel d-lg-none ms-auto me-2" role="img" aria-label={saudacao}>
+                            <FotoUsuario fotoSrc={fotoSrc} nome={nome} aniversario confete={confete} decorativa onErro={() => setFotoComErro(true)} />
+                        </span>
+                    )}
+
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
 
                     <Navbar.Collapse id="responsive-navbar-nav">
@@ -49,12 +102,14 @@ function Menu({ foto, nome }) {
 
                             {(foto || nome) && (
                                 <div className="navbar-user-info">
-                                    <span className="navbar-user-greeting">Olá, {nome}!</span>
-                                    {fotoValida ? (
-                                        <img src={fotoSrc} alt="Foto do colaborador" className="navbar-user-avatar" onError={() => setFotoComErro(true)} />
-                                    ) : (
-                                        <div className="navbar-user-placeholder">{nome ? nome.charAt(0) : ''}</div>
-                                    )}
+                                    <span className={confete ? 'navbar-user-greeting festa' : 'navbar-user-greeting'}>{saudacao}</span>
+                                    <FotoUsuario
+                                        fotoSrc={fotoSrc}
+                                        nome={nome}
+                                        aniversario={aniversario}
+                                        confete={confete}
+                                        onErro={() => setFotoComErro(true)}
+                                    />
                                 </div>
                             )}
 

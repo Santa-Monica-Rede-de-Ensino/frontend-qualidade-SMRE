@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parabéns no Cabeçalho</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --azul: #006CB5;
+    --ciano: #00A6E4;
+    --laranja: #F5821F;
+    --amarelo: #FFC94A;
+    --fundo-portal: #f0f4f8;
+    --fundo-pagina: #e3e9f0;
+    --texto: #2b3440;
+    --texto-suave: #5f6d7c;
+    --azul-claro: #eef6ff;
+    --barra: #17202b;
+    --barra-borda: #2e3a48;
+    --branco: #ffffff;
+    --fonte: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--fundo-pagina); color: var(--texto); font-family: var(--fonte);
+    font-size: 15px; padding-inline: 16px; padding-block: 0 40px;
+  }
+  button { font-family: inherit; }
+  :focus-visible { outline: 3px solid var(--laranja); outline-offset: 2px; }
+
+  /* ================= barra de controle (não faz parte do design) ================= */
+  .ctl {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; margin-inline: -16px; padding: 10px 16px;
+    background: var(--barra); color: #c9d3de; display: flex; flex-wrap: wrap; align-items: center;
+    justify-content: center; gap: 10px 18px; font-size: 13px;
+  }
+  .ctl-nome { color: var(--branco); font-weight: 900; letter-spacing: .04em; margin-right: auto; }
+  .ctl-grupo { display: flex; align-items: center; gap: 8px; }
+  .seg { display: flex; border: 1px solid var(--barra-borda); border-radius: 9px; overflow: hidden; }
+  .seg button { background: transparent; color: #c9d3de; border: 0; padding: 7px 13px; cursor: pointer; font-size: 13px; }
+  .seg button + button { border-left: 1px solid var(--barra-borda); }
+  .seg button[aria-pressed="true"] { background: var(--laranja); color: var(--branco); font-weight: 700; }
+  .repetir {
+    background: transparent; color: var(--branco); border: 1px solid var(--barra-borda); border-radius: 9px;
+    padding: 7px 13px; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 6px;
+  }
+  .repetir svg { width: 14px; height: 14px; }
+  @media (max-width: 560px) { .ctl-nome { width: 100%; text-align: center; margin: 0; } }
+
+  /* ================= briefing ================= */
+  .briefing { max-width: 1100px; margin: 28px auto 0; display: grid; gap: 14px; }
+  .briefing h1 { margin: 0; color: var(--azul); font-weight: 900; font-size: clamp(1.35rem, 3vw, 1.75rem); text-wrap: balance; }
+  .briefing > p { margin: 0; color: var(--texto-suave); line-height: 1.6; }
+  .opcoes { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  .opcao {
+    text-align: left; background: var(--branco); border: 2px solid transparent; border-radius: 14px;
+    padding: 14px 16px; cursor: pointer; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px;
+    box-shadow: 0 4px 14px rgba(0, 60, 110, .08); color: var(--texto); transition: border-color .2s ease, transform .2s ease;
+  }
+  .opcao:hover { transform: translateY(-2px); }
+  .opcao[aria-pressed="true"] { border-color: var(--laranja); }
+  .opcao-letra {
+    grid-row: span 2; width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center;
+    background: var(--azul-claro); color: var(--azul); font-weight: 900; font-size: 1.1rem;
+  }
+  .opcao[aria-pressed="true"] .opcao-letra { background: var(--laranja); color: var(--branco); }
+  .opcao strong { color: var(--azul); font-size: 1rem; }
+  .opcao span { color: var(--texto-suave); line-height: 1.5; font-size: .9rem; }
+  .decisao { color: var(--texto-suave); font-size: .9rem; }
+
+  /* ================= moldura do Portal ================= */
+  .frame {
+    container: frame / inline-size; max-width: 1100px; margin: 22px auto 0; background: var(--fundo-portal);
+    border-radius: 18px; overflow: hidden; box-shadow: 0 18px 50px rgba(10, 40, 70, .18); transition: max-width .35s ease;
+  }
+  .frame.celular { max-width: 390px; border-radius: 28px; }
+
+  /* Cabeçalho real: 86px, logo 95px, divisor, título, saudação + foto 62px e os três pontinhos */
+  .p-nav {
+    position: relative; height: 86px; padding: 0 25px; color: var(--branco);
+    background: linear-gradient(90deg, var(--azul) 0%, var(--ciano) 100%);
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .p-marca { display: flex; align-items: center; min-width: 0; }
+  .p-logo { height: 95px; width: auto; display: block; }
+  .p-div { width: 1px; height: 28px; background: rgba(255, 255, 255, .4); margin: 0 20px; }
+  .p-titulo { font-weight: 900; font-size: .95rem; letter-spacing: .05em; white-space: nowrap; }
+  .p-direita { display: flex; align-items: center; gap: 12px; }
+  .p-user { position: relative; display: flex; align-items: center; gap: 16px; }
+  .p-ola { font-weight: 700; font-size: 1rem; white-space: nowrap; }
+  .p-foto { position: relative; width: 62px; height: 62px; flex: none; }
+  .p-foto img { width: 100%; height: 100%; border-radius: 50%; border: 2px solid var(--branco); object-fit: cover; display: block; background: #d9e8f5; }
+  .p-pontos { width: 34px; height: 34px; display: grid; place-items: center; }
+  .p-pontos svg { width: 26px; height: 26px; }
+  .p-hamb { display: none; width: 40px; height: 34px; border: 1px solid rgba(255, 255, 255, .5); border-radius: 6px; place-items: center; }
+  .p-hamb svg { width: 22px; height: 22px; }
+
+  /* Corpo: um pedaço da tela inicial para dar contexto */
+  .p-corpo { padding: 22px 26px 34px; display: grid; grid-template-columns: 1.1fr 1fr; gap: 22px; }
+  .p-sec { background: var(--branco); border-radius: 16px; padding: 18px; box-shadow: 0 4px 14px rgba(0, 60, 110, .06); }
+  .p-sec h3 { margin: 0 0 14px; color: var(--azul); font-weight: 900; font-size: .95rem; letter-spacing: .04em; }
+  .p-atalhos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .p-atalho {
+    border: 1.5px solid rgba(0, 108, 181, .18); border-radius: 12px; padding: 12px 6px; display: grid; justify-items: center;
+    gap: 6px; color: var(--azul); font-size: .62rem; font-weight: 900; text-align: center; letter-spacing: .02em;
+  }
+  .p-atalho svg { width: 22px; height: 22px; }
+  .p-comunicado { padding: 10px 0; border-bottom: 1px solid #e6edf4; display: grid; gap: 3px; }
+  .p-comunicado:last-child { border-bottom: 0; }
+  .p-comunicado b { color: var(--texto); font-size: .9rem; }
+  .p-comunicado small { color: var(--texto-suave); }
+
+  /* ================= peças comuns da festa ================= */
+  .so-a, .so-b, .so-c { display: none; }
+  .modo-a .so-a, .modo-b .so-b, .modo-c .so-c { display: revert; }
+  .modo-a .so-a.flex, .modo-b .so-b.flex, .modo-c .so-c.flex { display: flex; }
+
+  /* A · Confete na foto: anel festivo, selo de festa e confetes saindo da foto ao entrar */
+  .modo-a .p-foto::before {
+    content: ''; position: absolute; inset: -5px; border-radius: 50%;
+    background: conic-gradient(var(--laranja), var(--amarelo), var(--branco), var(--laranja));
+  }
+  .modo-a .p-foto img { position: relative; }
+  .selo {
+    position: absolute; right: -6px; bottom: -4px; width: 26px; height: 26px; border-radius: 50%; z-index: 2;
+    display: none; background: var(--laranja); border: 2px solid var(--branco); color: var(--branco); place-items: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+  }
+  .modo-a .selo { display: grid; }
+  .selo svg { width: 14px; height: 14px; }
+  .confetes { position: absolute; left: 50%; top: 50%; width: 0; height: 0; z-index: 3; pointer-events: none; }
+  .confetes i {
+    position: absolute; width: 7px; height: 11px; border-radius: 2px; opacity: 0; background: var(--c);
+    transform: translate(-50%, -50%);
+  }
+  .festa .confetes i { animation: confete 1.6s cubic-bezier(.15, .7, .3, 1) forwards; animation-delay: var(--d); }
+  @keyframes confete {
+    0%   { opacity: 0; transform: translate(-50%, -50%) rotate(0) scale(.4); }
+    12%  { opacity: 1; }
+    80%  { opacity: 1; }
+    100% { opacity: 0; transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) rotate(var(--r)) scale(1); }
+  }
+  .festa.modo-a .selo { animation: seloPula .7s .9s cubic-bezier(.3, 1.6, .5, 1) backwards; }
+  @keyframes seloPula { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+
+  /* B · Saudação festiva: o "Olá" vira parabéns, com um bolinho de velas acesas */
+  .bolo { width: 30px; height: 30px; flex: none; }
+  .bolo .chama { transform-origin: center bottom; transform-box: fill-box; animation: chama 1.1s ease-in-out infinite alternate; }
+  .bolo .chama:nth-of-type(2) { animation-delay: -.4s; }
+  .bolo .chama:nth-of-type(3) { animation-delay: -.8s; }
+  @keyframes chama { 0% { transform: scale(.85, .9) rotate(-6deg); } 100% { transform: scale(1.05, 1.1) rotate(6deg); } }
+  .parabens { font-weight: 900; font-size: 1rem; white-space: nowrap; }
+  .parabens .curto { display: none; }
+  .festa .parabens, .festa.modo-a .p-ola.so-a {
+    background: linear-gradient(100deg, var(--branco) 40%, var(--amarelo) 50%, var(--branco) 60%) 0 0 / 300% 100%;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    animation: brilho 1.8s .3s ease-in-out 2 backwards;
+  }
+  @keyframes brilho { 0% { background-position: 100% 0; } 100% { background-position: 0 0; } }
+  .festa .bolo { animation: boloEntra .6s cubic-bezier(.3, 1.5, .5, 1) backwards; }
+  @keyframes boloEntra { 0% { transform: translateY(8px) scale(.5); opacity: 0; } 100% { transform: none; opacity: 1; } }
+  .brilhos { position: absolute; inset: 0; pointer-events: none; }
+  .brilhos i { position: absolute; width: 8px; height: 8px; opacity: 0; color: var(--amarelo); }
+  .brilhos i::before, .brilhos i::after { content: ''; position: absolute; background: currentColor; border-radius: 2px; }
+  .brilhos i::before { left: 3px; top: 0; width: 2px; height: 8px; }
+  .brilhos i::after { left: 0; top: 3px; width: 8px; height: 2px; }
+  .festa .brilhos i { animation: pisca 1.2s ease-in-out 2 backwards; animation-delay: var(--d); }
+  @keyframes pisca { 0%, 100% { opacity: 0; transform: scale(.3) rotate(0); } 50% { opacity: 1; transform: scale(1) rotate(45deg); } }
+
+  /* C · Balões: três balõezinhos sobem ao lado da foto e ficam balançando de leve */
+  .baloes { position: relative; width: 46px; height: 62px; flex: none; }
+  .balao { position: absolute; bottom: 0; width: 18px; animation: balanca 3.2s ease-in-out infinite alternate; transform-origin: 50% 100%; }
+  .balao svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .balao:nth-child(1) { left: 0; height: 52px; animation-delay: -1s; }
+  .balao:nth-child(2) { left: 14px; height: 62px; z-index: 1; }
+  .balao:nth-child(3) { left: 28px; height: 48px; animation-delay: -2s; }
+  .festa .baloes { animation: sobe 1.4s cubic-bezier(.2, .8, .3, 1) backwards; }
+  @keyframes sobe { 0% { transform: translateY(60px); opacity: 0; } 30% { opacity: 1; } 100% { transform: none; } }
+  @keyframes balanca { 0% { transform: rotate(-4deg); } 100% { transform: rotate(4deg); } }
+
+  /* ================= celular (moldura estreita) ================= */
+  /* O cabeçalho real esconde saudação e foto atrás do menu; no aniversário, a festa fica ao lado dele */
+  @container frame (max-width: 620px) {
+    .p-nav { height: 64px; padding: 0 14px; }
+    .p-logo { height: 48px; }
+    .p-div { display: none; }
+    .p-titulo { font-size: .66rem; letter-spacing: .03em; margin-left: 6px; }
+    .p-pontos, .frame .p-user .p-ola { display: none; }
+    .p-hamb { display: grid; }
+    .p-direita { gap: 10px; }
+    .p-user { gap: 8px; }
+    .p-foto { display: none; }
+    .modo-a .p-foto { display: block; width: 38px; height: 38px; }
+    .modo-a .p-foto::before { inset: -3px; }
+    .selo { width: 20px; height: 20px; right: -7px; bottom: -5px; }
+    .selo svg { width: 11px; height: 11px; }
+    .parabens { font-size: .8rem; }
+    .parabens .longo { display: none; }
+    .parabens .curto { display: inline; }
+    .bolo { width: 24px; height: 24px; }
+    .baloes { transform: scale(.75); transform-origin: right center; width: 46px; margin-left: -10px; }
+    .festa .baloes { animation-name: sobeCel; }
+    .p-corpo { grid-template-columns: 1fr; padding: 16px 14px 26px; gap: 14px; }
+  }
+  @keyframes sobeCel { 0% { transform: translateY(50px) scale(.75); opacity: 0; } 30% { opacity: 1; } 100% { transform: scale(.75); } }
+
+  /* Sem movimento: tudo aparece já no quadro final */
+  @media (prefers-reduced-motion: reduce) {
+    .frame *, .frame *::before, .frame *::after { animation: none !important; }
+    .confetes { display: none; }
+    .frame, .opcao { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="ctl" aria-label="Controles do mockup">
+  <span class="ctl-nome">PARABÉNS NO CABEÇALHO</span>
+  <div class="ctl-grupo">
+    <span>Opção:</span>
+    <div class="seg">
+      <button type="button" data-opcao="a" aria-pressed="true">A · Confete</button>
+      <button type="button" data-opcao="b" aria-pressed="false">B · Saudação</button>
+      <button type="button" data-opcao="c" aria-pressed="false">C · Balões</button>
+    </div>
+  </div>
+  <div class="ctl-grupo">
+    <span>Tela:</span>
+    <div class="seg">
+      <button type="button" data-tela="pc" aria-pressed="true">Computador</button>
+      <button type="button" data-tela="cel" aria-pressed="false">Celular</button>
+    </div>
+  </div>
+  <button type="button" class="repetir" id="repetir">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+    Ver a animação de novo
+  </button>
+</header>
+
+<section class="briefing">
+  <h1>Parabéns no cabeçalho do Portal</h1>
+  <p>
+    No dia do aniversário, quando o colaborador entrar no Portal, o cabeçalho mostra uma mini animação de parabéns.
+    Ela aparece em todas as páginas, só naquele dia. A animação toca quando a página abre e depois fica quietinha,
+    para não atrapalhar. Compare as três opções e veja também como fica no celular.
+  </p>
+  <div class="opcoes">
+    <button type="button" class="opcao" data-opcao="a" aria-pressed="true">
+      <span class="opcao-letra">A</span>
+      <strong>Confete na foto</strong>
+      <span>Confetes saem da foto, que ganha um contorno festivo e um selinho de festa no canto. A frase ganha o brilho da opção B.</span>
+    </button>
+    <button type="button" class="opcao" data-opcao="b" aria-pressed="false">
+      <span class="opcao-letra">B</span>
+      <strong>Saudação festiva</strong>
+      <span>O “Olá” vira “Feliz aniversário”, com um brilho no texto e um bolinho de velas acesas.</span>
+    </button>
+    <button type="button" class="opcao" data-opcao="c" aria-pressed="false">
+      <span class="opcao-letra">C</span>
+      <strong>Balões</strong>
+      <span>Três balõezinhos sobem ao lado da foto e ficam balançando de leve.</span>
+    </button>
+  </div>
+  <p class="decisao">Escolheu? É só me dizer a letra da opção que você prefere.</p>
+</section>
+
+<div class="frame modo-a festa" id="frame">
+  <div class="p-nav">
+    <span class="p-marca">
+      <img src="logo.png" alt="Santa Mônica" class="p-logo"><i class="p-div"></i>
+      <span class="p-titulo">PORTAL DO COLABORADOR</span>
+    </span>
+
+    <span class="p-direita">
+      <span class="p-user">
+        <span class="p-ola so-a">Feliz Aniversário, Leozinho!</span>
+        <span class="so-b flex" style="align-items:center;gap:8px;position:relative">
+          <svg class="bolo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/>
+            <ellipse class="chama" cx="7" cy="5.2" rx="1.1" ry="1.8" fill="#FFC94A" stroke="none"/>
+            <ellipse class="chama" cx="12" cy="5.2" rx="1.1" ry="1.8" fill="#FFC94A" stroke="none"/>
+            <ellipse class="chama" cx="17" cy="5.2" rx="1.1" ry="1.8" fill="#FFC94A" stroke="none"/>
+          </svg>
+          <span class="parabens"><span class="longo">Feliz aniversário, Leozinho!</span><span class="curto">Parabéns!</span></span>
+          <span class="brilhos" aria-hidden="true">
+            <i style="left:-6px;top:-10px;--d:.2s"></i><i style="left:46%;top:-14px;--d:.6s"></i>
+            <i style="right:-10px;top:-6px;--d:.4s"></i><i style="left:30%;bottom:-12px;--d:.9s"></i>
+          </span>
+        </span>
+        <span class="p-ola so-c">Parabéns, Leozinho!</span>
+        <span class="baloes so-c" aria-hidden="true">
+          <span class="balao"><svg viewBox="0 0 20 58"><ellipse cx="10" cy="11" rx="9" ry="11" fill="#F5821F"/><path d="M8 22h4l-2 3z" fill="#F5821F"/><path d="M10 25c-3 8 3 14 0 33" stroke="rgba(255,255,255,.75)" stroke-width="1" fill="none"/><ellipse cx="6.5" cy="7" rx="2" ry="3" fill="rgba(255,255,255,.45)"/></svg></span>
+          <span class="balao"><svg viewBox="0 0 20 58"><ellipse cx="10" cy="11" rx="9" ry="11" fill="#FFFFFF"/><path d="M8 22h4l-2 3z" fill="#FFFFFF"/><path d="M10 25c3 8-3 14 0 33" stroke="rgba(255,255,255,.75)" stroke-width="1" fill="none"/><ellipse cx="6.5" cy="7" rx="2" ry="3" fill="rgba(0,108,181,.15)"/></svg></span>
+          <span class="balao"><svg viewBox="0 0 20 58"><ellipse cx="10" cy="11" rx="9" ry="11" fill="#FFC94A"/><path d="M8 22h4l-2 3z" fill="#FFC94A"/><path d="M10 25c-3 8 3 14 0 33" stroke="rgba(255,255,255,.75)" stroke-width="1" fill="none"/><ellipse cx="6.5" cy="7" rx="2" ry="3" fill="rgba(255,255,255,.45)"/></svg></span>
+        </span>
+
+        <span class="p-foto">
+          <img src="leozinho-avatar.png" alt="Foto do Leozinho">
+          <span class="selo" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11c-.11.7-.72 1.22-1.43 1.22H17"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/></svg>
+          </span>
+          <span class="confetes so-a" aria-hidden="true" id="confetes"></span>
+        </span>
+      </span>
+      <span class="p-pontos" aria-hidden="true"><svg viewBox="0 0 24 24" fill="#fff"><circle cx="12" cy="5" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="12" cy="19" r="2.2"/></svg></span>
+      <span class="p-hamb" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></span>
+    </span>
+  </div>
+
+  <div class="p-corpo">
+    <section class="p-sec">
+      <h3>ATALHOS</h3>
+      <div class="p-atalhos">
+        <span class="p-atalho"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/></svg>ANIVERSARIANTES</span>
+        <span class="p-atalho"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>CONTRACHEQUE</span>
+        <span class="p-atalho"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg>GESTÃO DA QUALIDADE</span>
+        <span class="p-atalho"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>GUIA DO PORTAL</span>
+        <span class="p-atalho"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>RAMAIS</span>
+        <span class="p-atalho"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M12 17v4"/><path d="M8 21h8"/><path d="m9 10 2 2 4-4"/></svg>SISTEMA MONITORA</span>
+      </div>
+    </section>
+    <section class="p-sec">
+      <h3>COMUNICADOS</h3>
+      <div class="p-comunicado"><b>Semana da Qualidade</b><small>Confira a programação completa</small></div>
+      <div class="p-comunicado"><b>Novo Guia do Portal</b><small>Aprenda a usar o Portal passo a passo</small></div>
+      <div class="p-comunicado"><b>Aniversariantes do mês</b><small>Veja quem faz aniversário em outubro</small></div>
+    </section>
+  </div>
+</div>
+
+<script>
+  const frame = document.getElementById('frame');
+  const CORES = ['#F5821F', '#FFC94A', '#FFFFFF', '#00A6E4', '#F5821F', '#FFFFFF'];
+
+  // Confetes espalhados em círculo a partir da foto, com distância e giro variados
+  const confetes = document.getElementById('confetes');
+  for (let i = 0; i < 16; i++) {
+    const angulo = (i / 16) * Math.PI * 2 + (i % 2 ? .2 : -.1);
+    const dist = 46 + (i % 3) * 14;
+    const c = document.createElement('i');
+    c.style.cssText = `--x:${Math.cos(angulo) * dist}px;--y:${Math.sin(angulo) * dist}px;--r:${(i % 2 ? 1 : -1) * (180 + i * 25)}deg;--c:${CORES[i % CORES.length]};--d:${(i % 4) * .05}s`;
+    confetes.appendChild(c);
+  }
+
+  function marcar(seletor, ativo) {
+    document.querySelectorAll(seletor).forEach((b) => b.setAttribute('aria-pressed', String(ativo(b))));
+  }
+
+  // Tira e recoloca a classe para a animação de entrada tocar de novo
+  function tocarFesta() {
+    frame.classList.remove('festa');
+    void frame.offsetWidth;
+    frame.classList.add('festa');
+  }
+
+  function escolherOpcao(opcao) {
+    ['a', 'b', 'c'].forEach((l) => frame.classList.toggle(`modo-${l}`, l === opcao));
+    marcar('[data-opcao]', (b) => b.dataset.opcao === opcao);
+    tocarFesta();
+  }
+
+  document.querySelectorAll('[data-opcao]').forEach((b) => b.addEventListener('click', () => escolherOpcao(b.dataset.opcao)));
+  document.querySelectorAll('[data-tela]').forEach((b) => b.addEventListener('click', () => {
+    frame.classList.toggle('celular', b.dataset.tela === 'cel');
+    marcar('[data-tela]', (x) => x === b);
+    tocarFesta();
+  }));
+  document.getElementById('repetir').addEventListener('click', tocarFesta);
+
+  // Link direto para uma combinação, ex.: ?opcao=b&tela=cel
+  const pedido = new URLSearchParams(location.search);
+  if (pedido.get('tela') === 'cel') document.querySelector('[data-tela="cel"]').click();
+  if (['a', 'b', 'c'].includes(pedido.get('opcao'))) escolherOpcao(pedido.get('opcao'));
+</script>
+</body>
+</html>
