@@ -48,7 +48,8 @@
     font-family: 'Lato', sans-serif;
 }
 
-/* Aniversário de quem fez login: contorno festivo, selo e confete (o confete só na 1ª página da sessão) */
+/* Aniversário de quem fez login: contorno e selo o dia todo; confete e brilho só na 1ª página
+   da sessão */
 .navbar-user-foto {
     position: relative;
     display: inline-flex;
@@ -123,7 +124,7 @@
     100% { opacity: 0; transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) rotate(var(--r)) scale(1); }
 }
 
-/* Junto com o confete, um brilho amarelo passa pela saudação; no fim a faixa visível é toda branca */
+/* O fundo tem 3x a largura do texto: no fim fica à vista só o terço branco */
 .navbar-user-greeting.festa {
     background: linear-gradient(100deg, #FFFFFF 40%, #FFC94A 50%, #FFFFFF 60%) 0 0 / 300% 100%;
     -webkit-background-clip: text;
@@ -146,7 +147,7 @@
     display: inline-flex;
 }
 
-/* Celular estreito no aniversário: o título quebra em duas linhas para a foto e o ☰ caberem ao lado */
+/* Celular estreito no aniversário: o título quebra em duas linhas para a foto e o ☰ caberem */
 @media (max-width: 420px) {
     .custom-navbar.aniversario-hoje .portal-title {
         white-space: normal;
@@ -290,7 +291,7 @@
         margin-right: 6px;
     }
 
-    /* Sem a margem do Bootstrap na marca, a foto de aniversário e o ☰ cabem na mesma linha em 390px */
+    /* Sem a margem do Bootstrap na marca, a foto de aniversário e o ☰ cabem em 390px */
     .custom-navbar .brand-section {
         margin-right: 0;
     }

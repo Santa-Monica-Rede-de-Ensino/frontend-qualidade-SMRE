@@ -24,7 +24,6 @@ const ITENS_MENU = [
 
 export const itensMenuVisiveis = () => ITENS_MENU.filter((botao) => !(emProducao && botao.ocultoEmProducao));
 
-// Confetes espalhados em círculo a partir da foto, com distância, giro e cor variados.
 const CORES_CONFETE = ['#F5821F', '#FFC94A', '#FFFFFF', '#00A6E4'];
 const CONFETES = Array.from({ length: 16 }, (_, i) => {
     const angulo = (i / 16) * Math.PI * 2 + (i % 2 ? 0.2 : -0.1);
@@ -89,7 +88,7 @@ function Menu({ foto, nome }) {
                         <h2 className="portal-title">PORTAL DO COLABORADOR</h2>
                     </Navbar.Brand>
 
-                    {/* No celular a foto fica atrás do menu; no aniversário, uma cópia dela fica à vista */}
+                    {/* No celular a foto fica atrás do ☰; no aniversário, esta cópia aparece */}
                     {aniversario && (
                         <span className="navbar-aniversario-cel d-lg-none ms-auto me-2" role="img" aria-label={saudacao}>
                             <FotoUsuario fotoSrc={fotoSrc} nome={nome} aniversario confete={confete} decorativa onErro={() => setFotoComErro(true)} />

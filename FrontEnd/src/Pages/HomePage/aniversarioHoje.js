@@ -6,10 +6,12 @@ const CHAVE_CACHE = 'aniversarioHoje';
 const CHAVE_CONFETE = 'aniversarioConfeteTocado';
 const CHAVE_FORCADO = 'aniversarioForcado';
 
-// O webhook compara a data no fuso de Brasília; o cache usa o mesmo dia para não virar à meia-noite UTC.
+// O webhook compara a data no fuso de Brasília; o cache usa o mesmo dia para não virar
+// à meia-noite UTC.
 const hojeEmBrasilia = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo' }).format(new Date());
 
-// Armazenamento pode estar bloqueado (aba anônima, política do navegador): nunca deixa a festa quebrar o cabeçalho.
+// O armazenamento pode estar bloqueado (aba anônima, política do navegador): a festa nunca
+// pode quebrar o cabeçalho.
 function ler(armazenamento, chave) {
     try {
         return JSON.parse(armazenamento.getItem(chave));
@@ -26,8 +28,8 @@ function gravar(armazenamento, chave, valor) {
     }
 }
 
-// Fora de produção, ?aniversario=1 liga a festa para conferir no beta, pela sessão toda. É lido quando o
-// app carrega porque, depois do login, a URL já perdeu o parâmetro.
+// Fora de produção, ?aniversario=1 liga a festa pela sessão toda. É lido ao carregar o app
+// porque, depois do login, a URL já perdeu o parâmetro.
 if (!emProducao && new URLSearchParams(window.location.search).get('aniversario') === '1') {
     gravar(sessionStorage, CHAVE_FORCADO, true);
 }
@@ -42,7 +44,7 @@ function valorInicial(cpf) {
 }
 
 /**
- * Diz se hoje é aniversário do CPF logado. Consulta o webhook no máximo uma vez por dia por pessoa;
+ * Diz se hoje é aniversário do CPF. Consulta o webhook no máximo uma vez por dia por pessoa;
  * qualquer falha conta como "não é aniversário" e não fica no cache.
  */
 export function useAniversarioHoje(cpfBruto) {
@@ -71,10 +73,11 @@ export function useAniversarioHoje(cpfBruto) {
 }
 
 /**
- * Confete só na primeira página da sessão: o Menu remonta a cada página e confete a cada clique cansa.
- * A leitura é pura (StrictMode chama o inicializador duas vezes); quem marca como tocado é o efeito.
+ * Diz se o confete deve tocar: só na primeira página da sessão em que `ativo` é verdadeiro.
+ * O Menu remonta a cada página, e confete a cada clique cansa.
  */
 export function useConfeteDaSessao(ativo) {
+    // Só lê: o StrictMode chama o inicializador duas vezes; quem marca como tocado é o efeito.
     const [tocar] = useState(() => ler(sessionStorage, CHAVE_CONFETE) !== true);
 
     useEffect(() => {
