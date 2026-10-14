@@ -39,6 +39,10 @@
 .GuiaPortal .h-multi { height: 2em; border-color: #aaaaaa; border-radius: .3em; }
 .GuiaPortal .h-vazio { color: #999999; }
 .GuiaPortal .h-chip { padding: 0 .4em; border: 1px solid #aaaaaa; border-radius: .25em; background: #e4e4e4; }
+.GuiaPortal .h-area.texto-longo { display: block; white-space: normal; line-height: 1.5; padding: .5em .7em; }
+.GuiaPortal .h-anexados { display: flex; flex-direction: column; width: 100%; }
+.GuiaPortal .h-anexo { display: flex; align-items: center; }
+.GuiaPortal .h-anexo svg { width: 1em; height: 1em; margin-left: auto; color: #0b7dc1; }
 .GuiaPortal .h-caixa { box-sizing: border-box; width: .9em; height: .9em; border: 1px solid #767676; border-radius: .15em; background: #ffffff; }
 .GuiaPortal .h-arquivos { display: flex; align-items: center; gap: .25em; }
 .GuiaPortal .h-arquivos svg { width: 1em; height: 1em; flex: none; }
