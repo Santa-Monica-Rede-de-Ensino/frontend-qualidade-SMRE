@@ -100,7 +100,7 @@ const ComunicadosAcordeon = () => {
             )}
 
             {!loading && !erro && visiveis.length > 0 && (
-                <Accordion flush className="comunicados-accordion">
+                <Accordion flush className={termo ? 'comunicados-accordion filtrando' : 'comunicados-accordion'}>
                     {visiveis.map((item) => (
                         <Accordion.Item key={item.id} eventKey={String(item.id)} className="comunicado-item">
                             <Accordion.Header>

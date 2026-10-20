@@ -59,6 +59,11 @@
     flex-direction: column;
 }
 
+/* Na pesquisa, os resultados ficam no topo com o tamanho normal, sem esticar até o fim da caixa */
+.comunicados-accordion.filtrando .comunicado-item {
+    flex-grow: 0;
+}
+
 /* ── Pesquisa (na faixa azul, para não roubar altura dos 5 itens) ── */
 .comunicados-busca {
     margin-left: auto;
