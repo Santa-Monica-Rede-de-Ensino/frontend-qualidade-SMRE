@@ -1,24 +1,69 @@
 import React from 'react';
 import { Ticket } from 'lucide-react';
-import MiniVideo, { Tela } from './MiniVideo';
 import { Digita } from './telasTermo';
-import { TelaCsc, ListaCsc, Escolhe, Chips, TOPICO, VALORES as V, alvo, rolagem, caixaLinha } from './telasHelpdesk';
+import {
+    INICIO_FORMULARIO, FIM_FORMULARIO, formularioCsc, passosIniciais, ambos, Video, surgeTarde, Escolhe, Chips,
+    TOPICO_DESLIGAMENTO,
+} from './telasHelpdesk';
+const NOTA_REQUISICAO = "Preencha com 'Não aplicável' quando a reposição da vaga não atender ao requisito.";
 
-const LINK_CSC = 'https://helpdesk.smrede.net.br/';
-const VAZIO_TOPICO = '— Selecione um Tópico de Ajuda —';
+const LINHAS = [
+    ...INICIO_FORMULARIO,
+    { id: 'desligamento', tipo: 'h3', h: 6.5, risco: true, texto: 'G&G - Desligamento' },
+    { id: 'padrao', tipo: 'texto', h: 6, hCel: 8.5, texto: 'Título padrão: [ SIGLA DA UND ] - [ MODALIDADE DO DESLIGAMENTO ] - CARGO' },
+    { id: 'unidade', tipo: 'select', h: 8, rotulo: 'Unidade', obrig: true, larg: [25, 60] },
+    { id: 'nome', tipo: 'area', h: 13, rotulo: 'Nome completo do Colaborador', obrig: true, larg: [83, 92] },
+    { id: 'cargo', tipo: 'campo', h: 8, rotulo: 'Cargo', obrig: true, larg: [19, 50] },
+    { id: 'iniciativa', tipo: 'select', h: 8, rotulo: 'Iniciativa', obrig: true, larg: [16, 42] },
+    { id: 'motivo', tipo: 'select', h: 8, rotulo: 'Motivo de Desligamento', obrig: true, larg: [27, 66] },
+    { id: 'aviso', tipo: 'select', h: 8, rotulo: 'Aviso prévio', obrig: true, larg: [16, 42] },
+    { id: 'cipa', tipo: 'caixa', h: 7, rotulo: 'CIPA' },
+    { id: 'reposicao', tipo: 'select', h: 8, rotulo: 'Haverá necessidade de reposição da vaga?', obrig: true, larg: [16, 42] },
+    { id: 'anexos', tipo: 'arquivos', h: 7.5, rotulo: 'Anexos' },
+    { id: 'requisicao', tipo: 'h3', h: 6.5, risco: true, texto: 'G&G - Requisição de Pessoal' },
+    { id: 'notaRequisicao', tipo: 'texto', h: 6, hCel: 8.5, texto: NOTA_REQUISICAO },
+    { id: 'tipoVaga', tipo: 'select', h: 8, rotulo: 'Tipo de Vaga', obrig: true, larg: [16, 42] },
+    { id: 'contratacao', tipo: 'select', h: 8, rotulo: 'Tipo de Contratação', obrig: true, larg: [16, 42] },
+    { id: 'indicacao', tipo: 'select', h: 8, rotulo: 'Indicação', larg: [35, 86] },
+    { id: 'extras', tipo: 'arquivos', h: 11, hCel: 12, rotulo: 'Arquivos Extras', dica: 'Em caso de indicação, anexe o currículo aqui.' },
+    { id: 'cargoVaga', tipo: 'campo', h: 8, rotulo: 'Cargo', obrig: true, larg: [19, 50] },
+    { id: 'horario', tipo: 'campo', h: 11.5, hCel: 14, rotulo: 'Horário', obrig: true, larg: [19, 50], dica: 'Informe o horário de trabalho esperado. Exemplo: 8:00 às 18:00h' },
+    { id: 'professor', tipo: 'h3', h: 6.5, hCel: 10, risco: true, texto: 'G&G - Requisição de Pessoal - Professor e Monitor de Disciplina' },
+    { id: 'notaProfessor', tipo: 'texto', h: 6, hCel: 8.5, texto: NOTA_REQUISICAO },
+    { id: 'dias', tipo: 'multi', h: 9, rotulo: 'Dias da Semana', obrig: true, larg: [44, 92] },
+    { id: 'turno', tipo: 'campo', h: 11.5, hCel: 14, rotulo: 'Horário / Turno', obrig: true, larg: [19, 50], dica: 'Informe o horário de trabalho esperado. Exemplo: 8:00 às 8:50h' },
+    { id: 'tempos', tipo: 'campo', h: 8, rotulo: 'Qtd de Tempos', obrig: true, larg: [19, 50] },
+    { id: 'turmas', tipo: 'campo', h: 8, rotulo: 'Turmas', obrig: true, larg: [19, 50] },
+    { id: 'segmento', tipo: 'multi', h: 9, rotulo: 'Segmento', obrig: true, larg: [44, 92] },
+    { id: 'disciplina', tipo: 'campo', h: 8, rotulo: 'Disciplina', obrig: true, larg: [19, 50] },
+    ...FIM_FORMULARIO,
+];
 
-// Cada passo monta a mesma cena para o computador e para o celular (cel muda medidas e o toque).
-const ambos = (montar) => ({ cena: montar(false), cenaCel: montar(true) });
+const V = {
+    topico: TOPICO_DESLIGAMENTO,
+    titulo: 'CG - DEMISSÃO VOLUNTÁRIA - PROFESSOR',
+    unidade: 'UND. Campo Grande',
+    nome: 'João Exemplo da Silva',
+    cargo: 'Professor',
+    iniciativa: 'Funcionário',
+    motivo: 'Baixo desempenho',
+    aviso: 'Trabalhado',
+    reposicao: 'SIM',
+    tipoVaga: 'Efetiva',
+    contratacao: 'CLT',
+    indicacao: 'NÃO - Processo Seletivo Normal',
+    cargoVaga: 'Professor',
+    horario: '7:00 às 12:20h',
+    dias: ['Segunda-feira', 'Quarta-feira'],
+    turno: '7:00 às 12:20h',
+    tempos: '6',
+    turmas: '6º ano A e 6º ano B',
+    segmento: ['Fundamental II'],
+    disciplina: 'Matemática',
+};
 
-function Video({ cel, de = ['55%', '88%'], para, semClique, children }) {
-    return (
-        <MiniVideo cel={cel} semClique={semClique} x0={de[0]} y0={de[1]} x1={para.x} y1={para.y}>
-            {children}
-        </MiniVideo>
-    );
-}
-
-const surgeTarde = (conteudo) => <span className="surge tarde">{conteudo}</span>;
+const FORM = formularioCsc(LINHAS, V);
+const { TelaCsc, ListaCsc, alvo, rolagem, caixaLinha } = FORM;
 
 export const TEMA_HELPDESK = {
     id: 'helpdesk-desligamento',
@@ -28,34 +73,17 @@ export const TEMA_HELPDESK = {
     Icone: Ticket,
     grupos: [{
         passos: [
+            ...passosIniciais(FORM, TOPICO_DESLIGAMENTO, [null, null, TOPICO_DESLIGAMENTO, null, null]),
             {
-                acao: 'No Suporte CSC, clique em “Abrir Novo Ticket”.',
+                acao: 'Preencha o título conforme o padrão indicado.',
                 expl: (
                     <>
-                        Acesse o sistema <a href={LINK_CSC} target="_blank" rel="noopener noreferrer">Suporte CSC</a> e
-                        entre com o seu e-mail e senha. A opção fica no menu, logo abaixo do logo.
+                        Informe a sigla da unidade, a modalidade do desligamento e o cargo, seguindo o padrão apresentado no
+                        vídeo.<br />
+                        Observação: Para a modalidade do desligamento, selecione uma das seguintes opções: Demissão
+                        Involuntária, Demissão Voluntária ou Experiência (45 ou 90 dias).
                     </>
                 ),
-                ...ambos((cel) => (
-                    <Video cel={cel} de={['50%', '80%']} para={alvo('novo', 0, cel)}>
-                        <Tela fase="antes"><TelaCsc cel={cel} inicio ativo="principal" /></Tela>
-                        <Tela fase="depois"><TelaCsc cel={cel} ocultaApos="topico" /></Tela>
-                    </Video>
-                )),
-            },
-            {
-                acao: `Em “Tópico de ajuda”, escolha “${TOPICO}”.`,
-                expl: 'Ao escolher o tópico, os campos do pedido aparecem logo abaixo.',
-                ...ambos((cel) => (
-                    <Video cel={cel} para={alvo('topico', 0, cel)}>
-                        <TelaCsc cel={cel} revelaApos="topico" anima={{ topico: <Escolhe de={VAZIO_TOPICO}>{TOPICO}</Escolhe> }} />
-                        <ListaCsc cel={cel} rolar={0} de="topico" opcoes={[VAZIO_TOPICO, null, null, TOPICO, null, null]} on={3} />
-                    </Video>
-                )),
-            },
-            {
-                acao: 'Preencha o Título seguindo o título padrão.',
-                expl: `Informe a sigla da unidade, a modalidade do desligamento e o cargo. Exemplo: ${V.titulo}.`,
                 ...ambos((cel) => {
                     const rolar = rolagem('solicitacao', 6, cel);
                     return (
@@ -96,7 +124,7 @@ export const TEMA_HELPDESK = {
             },
             {
                 acao: 'Escolha a iniciativa, o motivo do desligamento e o aviso prévio.',
-                expl: 'Se o colaborador fizer parte da CIPA, marque a caixinha “CIPA”.',
+                expl: 'Caso o colaborador faça parte da CIPA, marque a opção “CIPA”.',
                 ...ambos((cel) => {
                     const rolar = rolagem('cargo', 4, cel);
                     return (
@@ -111,14 +139,14 @@ export const TEMA_HELPDESK = {
                                     aviso: <Escolhe>{V.aviso}</Escolhe>,
                                 }}
                             />
-                            <ListaCsc cel={cel} rolar={rolar} de="iniciativa" opcoes={['— Selecionar —', 'Empresa', 'Funcionário']} on={1} />
+                            <ListaCsc cel={cel} rolar={rolar} de="iniciativa" opcoes={['— Selecionar —', 'Empresa', 'Funcionário']} on={2} />
                         </Video>
                     );
                 }),
             },
             {
                 acao: 'Informe se haverá reposição da vaga.',
-                expl: 'Se escolher “SIM”, preencha também a Requisição de Pessoal: tipo de vaga, tipo de contratação, indicação, cargo e horário.',
+                expl: 'Se escolher a opção “SIM”, você deverá preencher os dados nos formulários de Requisição. Caso escolha a opção “NÃO”, os campos também deverão ser preenchidos, utilizando “N/A” ou “Não aplicável”',
                 ...ambos((cel) => {
                     const rolar = rolagem('reposicao', 6, cel);
                     return (
@@ -142,8 +170,8 @@ export const TEMA_HELPDESK = {
                 }),
             },
             {
-                acao: 'Vaga de professor ou monitor? Preencha também os dados da disciplina.',
-                expl: 'Informe os dias da semana, o horário, a quantidade de tempos, as turmas, o segmento e a disciplina.',
+                acao: 'Vaga de Professor ou Monitor? Preencha também os dados solicitados no segundo formulário de Requisição.',
+                expl: 'Preencha todos os campos do formulário de Requisição de Pessoal – Professor e Monitor de Disciplina. Todos os campos são obrigatórios.',
                 ...ambos((cel) => {
                     const rolar = rolagem('professor', 4, cel);
                     return (
@@ -173,8 +201,8 @@ export const TEMA_HELPDESK = {
                 }),
             },
             {
-                acao: 'Para finalizar, clique em “Criar Ticket”.',
-                expl: 'Pronto! Você acompanha o andamento do seu pedido em “Tickets”, no menu do CSC.',
+                acao: 'Para concluir a solicitação, clique no botão “Criar Ticket”.',
+                expl: 'Pronto! Sua solicitação foi criada. Para acompanhar o andamento, acesse o menu “Tickets” no sistema Suporte CSC.',
                 ...ambos((cel) => {
                     const rolar = rolagem('botoes', 78, cel);
                     return (
