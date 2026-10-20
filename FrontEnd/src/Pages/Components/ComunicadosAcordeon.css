@@ -48,12 +48,74 @@
     overflow-y: auto;
 }
 
+/* 1/5 da caixa: os 5 mais recentes ficam à vista e o resto vai para a rolagem; com menos de 5,
+   o flex-grow estica os itens para não sobrar buraco */
 .comunicado-item {
     border: none !important;
     border-bottom: 1px solid rgba(0, 108, 181, 0.07) !important;
-    flex: 1;
+    flex: 1 0 auto;
+    min-height: 20%;
     display: flex;
     flex-direction: column;
+}
+
+/* Na pesquisa, os resultados ficam no topo com o tamanho normal, sem esticar até o fim da caixa */
+.comunicados-accordion.filtrando .comunicado-item {
+    flex-grow: 0;
+}
+
+/* ── Pesquisa (na faixa azul, para não roubar altura dos 5 itens) ── */
+.comunicados-busca {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 190px;
+    padding: 0 10px;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.18);
+    transition: background-color 0.2s ease;
+}
+
+.comunicados-busca:focus-within {
+    background: #ffffff;
+    border-color: #ffffff;
+}
+
+.comunicados-busca svg {
+    width: 15px;
+    height: 15px;
+    color: #ffffff;
+    flex-shrink: 0;
+}
+
+.comunicados-busca:focus-within svg {
+    color: #006CB5;
+}
+
+.comunicados-busca input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    padding: 5px 0;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.85rem;
+    color: #ffffff;
+}
+
+.comunicados-busca input::placeholder {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.comunicados-busca:focus-within input {
+    color: #1c2a3a;
+}
+
+.comunicados-busca:focus-within input::placeholder {
+    color: #8a9ab0;
 }
 
 .comunicado-item:last-child {
@@ -187,6 +249,19 @@
     margin: 0;
 }
 
+/* Celular estreito: título e pesquisa não cabem lado a lado na faixa azul */
+@media (max-width: 480px) {
+    .comunicados-header-bar {
+        flex-wrap: wrap;
+        row-gap: 10px;
+    }
+
+    .comunicados-busca {
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
 /* Mobile / Tablet */
 @media (max-width: 991px) {
     .comunicados-wrapper {
@@ -195,12 +270,15 @@
         border-radius: 14px;
     }
 
+    /* No celular a caixa não tem altura fixa: a lista limita a ~5 itens e rola o resto */
     .comunicados-accordion {
-        overflow-y: visible;
+        max-height: 330px;
+        overflow-y: auto;
     }
 
     .comunicado-item {
         flex: none;
+        min-height: 0;
     }
 
     .comunicado-item .accordion-header {
