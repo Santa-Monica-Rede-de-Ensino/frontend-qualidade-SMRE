@@ -54,9 +54,19 @@ https://santa-monica-rede-de-ensino.github.io/frontend-qualidade-SMRE/. Rode na 
 | `npm run deploy` | raiz | Produção, depois do beta aprovado (veja abaixo) |
 | `npm run deploy:tutorial-termo` | `/tutorial-termo/` | Tutorial dos Termos de Compromisso, sem login |
 | `npm run deploy:tutorial-helpdesk` | `/tutorial-helpdesk/` | Tutorial do ticket de Desligamento e Contratação no Suporte CSC, sem login |
+| `npm run deploy:tutorial-analise-desligamento` | `/tutorial-analise-desligamento/` | Tutorial do ticket de Análise de Desligamento no Suporte CSC, sem login |
 
 Os tutoriais usam os arquivos do Guia (`src/Pages/Guia/conteudo*.jsx`), e cada endereço só muda
-depois do seu próprio deploy. Para ver um tutorial na máquina: `npm run start:tutorial-helpdesk`.
+depois do seu próprio deploy. Para ver um tutorial na máquina: `npm run start:tutorial-<nome>`. Os
+tutoriais do Suporte CSC dividem as telas em `telasHelpdesk.jsx`; cada tópico tem seu `conteudo*.jsx`.
+
+Se o deploy falhar com `Filename too long` (o Windows limita o caminho dos PDFs da pasta `public`),
+no PowerShell rode `npx gh-pages-clean` e repita o `gh-pages` com o Git aceitando caminhos longos:
+
+```
+$env:GIT_CONFIG_COUNT='1'; $env:GIT_CONFIG_KEY_0='core.longpaths'; $env:GIT_CONFIG_VALUE_0='true'
+npx gh-pages -d build -e <pasta>
+```
 
 ### Produção
 
