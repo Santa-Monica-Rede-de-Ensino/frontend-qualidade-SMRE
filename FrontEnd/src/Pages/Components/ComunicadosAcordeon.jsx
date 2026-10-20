@@ -1,8 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Accordion } from 'react-bootstrap';
 import './ComunicadosAcordeon.css';
 
 const API_URL = 'https://auto.smrede.tec.br/webhook/Emails';
+
+// Quem pesquisa costuma digitar sem acento: "reuniao" precisa achar "Reunião".
+const normalizar = (txt) => String(txt ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+
+// E-mail traz CSS e scripts no corpo; sem tirá-los, buscar "color" acharia todos.
+function textoDoHtml(html) {
+    const doc = new DOMParser().parseFromString(html || '', 'text/html');
+    doc.querySelectorAll('script, style').forEach((el) => el.remove());
+    return doc.body.textContent || '';
+}
 
 function formatarData(isoString) {
     if (!isoString) return '—';
@@ -18,6 +28,7 @@ const ComunicadosAcordeon = () => {
     const [comunicados, setComunicados] = useState([]);
     const [loading, setLoading] = useState(true);
     const [erro, setErro] = useState(false);
+    const [busca, setBusca] = useState('');
 
     const fetchComunicados = (showLoading = false) => {
         if (showLoading) setLoading(true);
@@ -27,7 +38,7 @@ const ComunicadosAcordeon = () => {
             .then(data => {
                 const ordenados = [...data]
                     .sort((a, b) => new Date(b.data) - new Date(a.data))
-                    .slice(0, 5);
+                    .map((item) => ({ ...item, indice: normalizar(`${item.assunto} ${textoDoHtml(item.html)}`) }));
                 setComunicados(ordenados);
                 setLoading(false);
             })
@@ -42,6 +53,12 @@ const ComunicadosAcordeon = () => {
         const poll = setInterval(() => fetchComunicados(false), POLL_MS);
         return () => clearInterval(poll);
     }, []);
+
+    const termo = normalizar(busca.trim());
+    const visiveis = useMemo(
+        () => (termo ? comunicados.filter((item) => item.indice.includes(termo)) : comunicados),
+        [comunicados, termo],
+    );
 
     useEffect(() => {
         if (!erro) return;
@@ -63,11 +80,30 @@ const ComunicadosAcordeon = () => {
                 <div className="comunicados-estado">Carregando comunicados...</div>
             )}
 
-
             {!loading && !erro && (
+                <div className="comunicados-busca">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                        <circle cx="11" cy="11" r="7" />
+                        <path d="m20 20-3.5-3.5" />
+                    </svg>
+                    <input
+                        type="search"
+                        value={busca}
+                        onChange={(e) => setBusca(e.target.value)}
+                        placeholder="Pesquisar comunicados"
+                        aria-label="Pesquisar comunicados"
+                    />
+                </div>
+            )}
+
+            {!loading && !erro && termo && visiveis.length === 0 && (
+                <div className="comunicados-estado" role="status">Nenhum comunicado encontrado.</div>
+            )}
+
+            {!loading && !erro && visiveis.length > 0 && (
                 <Accordion flush className="comunicados-accordion">
-                    {comunicados.map((item, index) => (
-                        <Accordion.Item key={item.id} eventKey={String(index)} className="comunicado-item">
+                    {visiveis.map((item) => (
+                        <Accordion.Item key={item.id} eventKey={String(item.id)} className="comunicado-item">
                             <Accordion.Header>
                                 <div className="comunicado-header-content">
                                     <span className="comunicado-titulo-texto">{item.assunto}</span>
