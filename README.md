@@ -29,24 +29,65 @@ Abra http://localhost:3000/frontend-qualidade-SMRE/. O caminho vem do `homepage`
 |---|---|
 | `REACT_APP_BACKEND` | Endereço da API. O padrão do `.env.example` é o backend de produção. |
 
-O `.env` só é lido quando o `npm start` ou o build começa. Depois de mudar o arquivo, reinicie o
-`npm start` ou publique de novo.
+O `.env` não vai para o Git e só é lido quando o `npm start` ou o build começa. Um build feito
+sem ele sai sem backend, e o login para de funcionar.
 
 Os scripts de build preenchem `REACT_APP_FASE` (esconde menus em construção na produção) e
-`REACT_APP_ALVO` (gera só o tutorial dos Termos). Não coloque essas duas no `.env`.
+`REACT_APP_ALVO` (gera só um tutorial avulso). Não coloque essas duas no `.env`.
+
+Além do backend, o Portal lê webhooks do n8n em `https://auto.smrede.tec.br/webhook/`:
+
+| Webhook | Tela |
+|---|---|
+| `ramais` | Ramais (dados da planilha do Drive) |
+| `niver/?mes=N` | Aniversariantes |
+| `Emails` | Comunicados da tela inicial |
 
 ## Publicar
 
-Tudo vai para o GitHub Pages, cada versão numa pasta. Rode na pasta `FrontEnd`.
+Tudo vai para o GitHub Pages da organização, cada versão numa pasta da branch `gh-pages`, em
+https://santa-monica-rede-de-ensino.github.io/frontend-qualidade-SMRE/. Rode na pasta `FrontEnd`.
 
-| Comando | Endereço | Quando |
+| Comando | Pasta | O que é |
 |---|---|---|
-| `npm run deploy:beta` | https://maycon-mb.github.io/frontend-qualidade-SMRE/beta/ | Sempre primeiro, para conferir |
-| `npm run deploy` | https://maycon-mb.github.io/frontend-qualidade-SMRE/ | Produção, depois do beta aprovado (não verificado) |
-| `npm run deploy:tutorial-termo` | https://maycon-mb.github.io/frontend-qualidade-SMRE/tutorial-termo/ | Tutorial dos Termos de Compromisso, sem login nem Portal (não verificado) |
+| `npm run deploy:beta` | `/beta/` | Sempre primeiro, para conferir |
+| `npm run deploy` | raiz | Produção, depois do beta aprovado (veja abaixo) |
+| `npm run deploy:tutorial-termo` | `/tutorial-termo/` | Tutorial dos Termos de Compromisso, sem login |
+| `npm run deploy:tutorial-helpdesk` | `/tutorial-helpdesk/` | Tutorial do ticket de Desligamento e Contratação no Suporte CSC, sem login |
+| `npm run deploy:tutorial-analise-desligamento` | `/tutorial-analise-desligamento/` | Tutorial do ticket de Análise de Desligamento no Suporte CSC, sem login |
 
-O tutorial usa os mesmos arquivos do Guia do Portal (`src/Pages/Guia/conteudoTermo.jsx`). Um
-ajuste de texto ali vale para os dois, mas cada endereço só muda depois do seu próprio deploy.
+Os tutoriais usam os arquivos do Guia (`src/Pages/Guia/conteudo*.jsx`), e cada endereço só muda
+depois do seu próprio deploy. Para ver um tutorial na máquina: `npm run start:tutorial-<nome>`. Os
+tutoriais do Suporte CSC dividem as telas em `telasHelpdesk.jsx`; cada tópico tem seu `conteudo*.jsx`.
 
-Para hospedar o tutorial em outro servidor, troque o `PUBLIC_URL` do script `build:tutorial-termo`
-pelo endereço novo e rode `npm run build:tutorial-termo`. O resultado fica na pasta `build`.
+Se o deploy falhar com `Filename too long` (o Windows limita o caminho dos PDFs da pasta `public`),
+no PowerShell rode `npx gh-pages-clean` e repita o `gh-pages` com o Git aceitando caminhos longos:
+
+```
+$env:GIT_CONFIG_COUNT='1'; $env:GIT_CONFIG_KEY_0='core.longpaths'; $env:GIT_CONFIG_VALUE_0='true'
+npx gh-pages -d build -e <pasta>
+```
+
+### Produção
+
+A `main` costuma ter coisas que ainda estão só no beta. Produção sai da branch `producao`, que
+guarda o que está no ar:
+
+1. `git worktree add --detach ../FQ-producao origin/producao` e `git cherry-pick` dos commits que vão
+   para produção.
+2. Copie `FrontEnd/.env` para o worktree e rode `npm ci` lá dentro. Não faça link para o
+   `node_modules` do projeto: o `git worktree remove` apaga o destino do link.
+3. `npm run predeploy` e confira que `build/static/js/main.*.js` tem `backportaldocolaborador`.
+4. `npx gh-pages -d build --add`. O `--add` mantém as pastas do beta, dos tutoriais e dos mockups.
+5. Envie o commit publicado para a branch `producao`.
+
+## Mockups
+
+Decisão visual começa num mockup em `mockups/<assunto>/`: um HTML só, fora do build, com as opções
+lado a lado para aprovação. Para publicar, na pasta `FrontEnd`:
+
+```
+npx gh-pages -d ../mockups/<assunto> -e <assunto> --add
+```
+
+O mockup fica em `/<assunto>/` no mesmo endereço do Pages.
