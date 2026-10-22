@@ -257,7 +257,6 @@ const areaDetails = {
                         >
                             VISUALIZAR DOCUMENTO <i className="fa-solid fa-angles-right"></i>
                         </Button>
-                        <BotaoFluxoProcesso codigo="PS.06-0.1" />
                         <div style={{ clear: 'both' }}></div>
                     </>
                 ),
@@ -277,7 +276,6 @@ const areaDetails = {
                         >
                             VISUALIZAR DOCUMENTO <i className="fa-solid fa-angles-right"></i>
                         </Button>
-                        <BotaoFluxoProcesso codigo="PS.06-0.2" />
                         <div style={{ clear: 'both' }}></div>
                     </>
                 ),
