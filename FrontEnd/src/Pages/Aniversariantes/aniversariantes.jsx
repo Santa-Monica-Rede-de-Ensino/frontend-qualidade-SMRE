@@ -15,6 +15,10 @@ const NOMES_UNIDADES = { 'Centro Administrativo': 'Central Administrativa' };
 
 const ORDEM_FIXA = ['Central Administrativa'];
 
+// Unidades pequenas somem do filtro nos meses sem aniversariante; a Qualidade pediu que estas
+// apareçam sempre (com contagem 0).
+const SEMPRE_NO_FILTRO = ['Nova Iguaçu'];
+
 const PALAVRAS_MINUSCULAS = new Set(['de', 'da', 'do', 'das', 'dos', 'e']);
 
 const normalizar = (txt) => String(txt ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
@@ -285,7 +289,7 @@ function Aniversariantes() {
 
     const unidades = useMemo(() => {
         if (!dados) return [];
-        const presentes = [...new Set(dados.map((d) => d.unidade))].filter(Boolean);
+        const presentes = [...new Set([...dados.map((d) => d.unidade), ...SEMPRE_NO_FILTRO])].filter(Boolean);
         const fixas = ORDEM_FIXA.filter((u) => presentes.includes(u));
         const restantes = ordenarAlfa(presentes.filter((u) => !ORDEM_FIXA.includes(u)), (u) => u);
         return [...fixas, ...restantes];
