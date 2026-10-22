@@ -179,7 +179,6 @@ const areaDetails = {
                         >
                             VISUALIZAR DOCUMENTO <i className="fa-solid fa-angles-right"></i>
                         </Button>
-                        <BotaoFluxoProcesso codigo="PE.02-0.2" />
                         <div style={{ clear: 'both' }}></div>
                     </>
                 ),
@@ -201,7 +200,6 @@ const areaDetails = {
                         >
                             VISUALIZAR DOCUMENTO <i className="fa-solid fa-angles-right"></i>
                         </Button>
-                        <BotaoFluxoProcesso codigo="PE.02-0.3" />
                         <div style={{ clear: 'both' }}></div>
                     </>
                 ),
