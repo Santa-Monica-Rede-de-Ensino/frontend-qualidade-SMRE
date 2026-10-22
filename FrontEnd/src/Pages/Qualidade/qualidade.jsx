@@ -8,27 +8,36 @@ import { linkEmConstrucao } from "../EmConstrucao/linkEmConstrucao";
 import { busca_foto } from "../../services/api";
 import './qualidade.css';
 
-// Regra da Qualidade: só documento de processo com fluxo pronto ganha o botão (Políticas não têm
-// fluxo). Para mostrar, preencha `fluxo` no documento com o link do fluxo.
+// Os botões dependem só dos dados do documento: `pdf` (arquivo em public/documentos) mostra
+// "Visualizar documento"; `fluxo` (link) mostra "Fluxo do processo" — Políticas não têm fluxo.
 function CorpoDocumento({ doc }) {
     return (
         <>
             {doc.corpo}
-            {doc.fluxo && (
-                <>
-                    {/* Abre em nova aba, como o PDF do documento, para não tirar a pessoa da área aberta */}
-                    <Button
-                        as="a"
-                        href={doc.fluxo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-visualizar-doc btn-fluxo-processo"
-                    >
-                        FLUXO DO PROCESSO <i className="fa-solid fa-diagram-project"></i>
-                    </Button>
-                    <div style={{ clear: 'both' }}></div>
-                </>
+            {/* Os dois abrem em nova aba para não tirar a pessoa da área aberta */}
+            {doc.pdf && (
+                <Button
+                    as="a"
+                    href={`${process.env.PUBLIC_URL}/documentos/${doc.pdf}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-visualizar-doc"
+                >
+                    VISUALIZAR DOCUMENTO <i className="fa-solid fa-angles-right"></i>
+                </Button>
             )}
+            {doc.fluxo && (
+                <Button
+                    as="a"
+                    href={doc.fluxo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-visualizar-doc btn-fluxo-processo"
+                >
+                    FLUXO DO PROCESSO <i className="fa-solid fa-diagram-project"></i>
+                </Button>
+            )}
+            {(doc.pdf || doc.fluxo) && <div style={{ clear: 'both' }}></div>}
         </>
     );
 }
@@ -133,10 +142,6 @@ const areaDetails = {
                     <>
                         <p>Este documento regulamenta os critérios do processo <strong>PG.01-1.2.1 IP - Controle de Informação Documentada</strong>, relacionado à área da Qualidade, com o objetivo de determinar a metodologia para criação, emissão, aprovação, revisão e controle da informação documentada provida e mantida (documentos) pelo Sistema de Gestão da Qualidade (SGQ), bem como, demonstrar a sistemática aplicada para identificar, armazenar, proteger, recuperar, tempo de reter e disponibilizar o SGQ e seus registros.</p>
                         <p>O processo se aplica à área da Qualidade, como executor das atividades e aos Facilitadores, Gestores de Processos e a Alta Direção, como responsáveis pela elaboração, auxílio e análise crítica dos documentos.</p>
-                        <Button className="btn-visualizar-doc">
-                            VISUALIZAR DOCUMENTO <i className="fa-solid fa-angles-right"></i>
-                        </Button>
-                        <div style={{ clear: 'both' }}></div>
                     </>
                 ),
             },
@@ -176,40 +181,22 @@ const areaDetails = {
             {
                 eventKey: '1',
                 titulo: 'PE.02-0.2 - Identidade Organizacional',
+                pdf: 'PE.02-0.2-identidade-organizacional.pdf',
                 corpo: (
                     <>
                         <p>A <strong>Identidade Organizacional</strong>, constituída por nossa <strong>Missão, Visão e Valores</strong>, tem como função orientar as decisões estratégicas, alinhar as equipes em torno de um propósito comum e fortalecer a essência e a cultura da instituição. Além disso, contribui para aumentar o engajamento, aprimorar a comunicação com as famílias e parceiros e facilitar o processo da Qualidade, por estar diretamente relacionada às Políticas Internas do SMREDE, aos objetivos institucionais e aos processos de melhoria contínua.</p>
-                        <Button
-                            as="a"
-                            href={`${process.env.PUBLIC_URL}/documentos/PE.02-0.2-identidade-organizacional.pdf`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn-visualizar-doc"
-                        >
-                            VISUALIZAR DOCUMENTO <i className="fa-solid fa-angles-right"></i>
-                        </Button>
-                        <div style={{ clear: 'both' }}></div>
                     </>
                 ),
             },
             {
                 eventKey: '2',
                 titulo: 'PE.02-0.3 - Código de Ética e Conduta',
+                pdf: 'PE.02-0.3-codigo-de-etica-e-conduta.pdf',
                 corpo: (
                     <>
                         <p>O <strong>Santa Mônica Rede de Ensino</strong> tem como compromisso oferecer uma educação de excelência, promovendo o desenvolvimento integral dos alunos nos aspectos intelectual, social, emocional, físico e ético. A instituição busca formar cidadãos conscientes, solidários, criativos e preparados para enfrentar desafios, contando, para isso, com uma equipe comprometida com seus princípios e valores.</p>
                         <p>Para preservar sua reputação e credibilidade, a instituição estabelece como fundamentos de atuação a <strong>honestidade, o respeito, a integridade e a ética</strong>. A conduta de seus profissionais deve estar alinhada a esses princípios, bem como às políticas, normas e procedimentos internos.</p>
                         <p>O <strong>Código de Ética e Conduta</strong>, fundamentado na Missão, Visão e Valores da instituição, orienta o comportamento esperado de administradores, diretores, colaboradores, estagiários, jovens aprendizes e terceiros que mantêm relacionamento com o Santa Mônica Rede de Ensino. Seu objetivo é assegurar uma atuação ética e responsável, fortalecendo a confiança de alunos, famílias, fornecedores, parceiros e da sociedade.</p>
-                        <Button
-                            as="a"
-                            href={`${process.env.PUBLIC_URL}/documentos/PE.02-0.3-codigo-de-etica-e-conduta.pdf`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn-visualizar-doc"
-                        >
-                            VISUALIZAR DOCUMENTO <i className="fa-solid fa-angles-right"></i>
-                        </Button>
-                        <div style={{ clear: 'both' }}></div>
                     </>
                 ),
             },
@@ -252,38 +239,20 @@ const areaDetails = {
             {
                 eventKey: '0',
                 titulo: 'PS.06-0.1 - Política de Privacidade',
+                pdf: 'PS.06-0.1-politica-de-privacidade.pdf',
                 corpo: (
                     <>
                         <p>No Santa Mônica Rede de Ensino, privacidade e segurança são prioridades inegociáveis. Comprometemo-nos com a total transparência no tratamento de dados pessoais de nossos usuários, em estrita conformidade com a legislação vigente. Esta política detalha os procedimentos de coleta, uso e transferência de informações de clientes (famílias e alunos) e demais usuários que acessam ou utilizam nosso site.</p>
-                        <Button
-                            as="a"
-                            href={`${process.env.PUBLIC_URL}/documentos/PS.06-0.1-politica-de-privacidade.pdf`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn-visualizar-doc"
-                        >
-                            VISUALIZAR DOCUMENTO <i className="fa-solid fa-angles-right"></i>
-                        </Button>
-                        <div style={{ clear: 'both' }}></div>
                     </>
                 ),
             },
             {
                 eventKey: '1',
                 titulo: 'PS.06-0.2 - Política de Segurança da Informação',
+                pdf: 'PS.06-0.2-politica-de-seguranca-da-informacao.pdf',
                 corpo: (
                     <>
                         <p>Esta política estabelece diretrizes e normas obrigatórias para proteger os ativos de informação do SMREDE, garantindo a confidencialidade, integridade, disponibilidade, autenticidade e rastreabilidade (CIDAR). Também orienta o uso seguro, responsável e monitorado dos recursos tecnológicos e informacionais da instituição, em conformidade com a legislação aplicável, especialmente a <strong>Lei Geral de Proteção de Dados Pessoais</strong> (LGPD), bem como com boas práticas e referenciais de mercado.</p>
-                        <Button
-                            as="a"
-                            href={`${process.env.PUBLIC_URL}/documentos/PS.06-0.2-politica-de-seguranca-da-informacao.pdf`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn-visualizar-doc"
-                        >
-                            VISUALIZAR DOCUMENTO <i className="fa-solid fa-angles-right"></i>
-                        </Button>
-                        <div style={{ clear: 'both' }}></div>
                     </>
                 ),
             },
@@ -297,20 +266,11 @@ const areaDetails = {
                     {
                         eventKey: 'ps-06-1-1',
                         titulo: 'PS.06.1.1 - Procedimento de Gestão de Backups e Recuperação de Dados',
+                        pdf: 'PS.06.1.1-procedimento-de-gestao-de-backups-e-recuperacao-de-dados.pdf',
                         corpo: (
                             <>
                                 <p>Este documento regulamenta os critérios do processo <strong>PS.06.1.1 - Procedimento de Gestão de Backups e Recuperação de Dados</strong>, relacionado à área de TI, com o objetivo de estabelecer o processo para a salvaguarda e recuperação dos dados institucionais, garantindo a disponibilidade dos serviços acadêmicos e administrativos em caso de falhas críticas, erros humanos ou ataques cibernéticos.</p>
                                 <p>O processo se aplica à área de TI, tendo a equipe de Infraestrutura como principal executora das atividades.</p>
-                                <Button
-                                    as="a"
-                                    href={`${process.env.PUBLIC_URL}/documentos/PS.06.1.1-procedimento-de-gestao-de-backups-e-recuperacao-de-dados.pdf`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="btn-visualizar-doc"
-                                >
-                                    VISUALIZAR DOCUMENTO <i className="fa-solid fa-angles-right"></i>
-                                </Button>
-                                <div style={{ clear: 'both' }}></div>
                             </>
                         ),
                     },
