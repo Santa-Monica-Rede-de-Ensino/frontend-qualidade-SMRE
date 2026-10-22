@@ -8,18 +8,28 @@ import { linkEmConstrucao } from "../EmConstrucao/linkEmConstrucao";
 import { busca_foto } from "../../services/api";
 import './qualidade.css';
 
-// Abre em nova aba, como o PDF do documento, para não tirar a pessoa da área aberta.
-function BotaoFluxoProcesso({ codigo }) {
+// Regra da Qualidade: só documento de processo com fluxo pronto ganha o botão (Políticas não têm
+// fluxo). Para mostrar, preencha `fluxo` no documento com o link do fluxo.
+function CorpoDocumento({ doc }) {
     return (
-        <Button
-            as="a"
-            href={`${process.env.PUBLIC_URL}/#${linkEmConstrucao(`Fluxo do processo ${codigo}`)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-visualizar-doc btn-fluxo-processo"
-        >
-            FLUXO DO PROCESSO <i className="fa-solid fa-diagram-project"></i>
-        </Button>
+        <>
+            {doc.corpo}
+            {doc.fluxo && (
+                <>
+                    {/* Abre em nova aba, como o PDF do documento, para não tirar a pessoa da área aberta */}
+                    <Button
+                        as="a"
+                        href={doc.fluxo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-visualizar-doc btn-fluxo-processo"
+                    >
+                        FLUXO DO PROCESSO <i className="fa-solid fa-diagram-project"></i>
+                    </Button>
+                    <div style={{ clear: 'both' }}></div>
+                </>
+            )}
+        </>
     );
 }
 
@@ -126,7 +136,6 @@ const areaDetails = {
                         <Button className="btn-visualizar-doc">
                             VISUALIZAR DOCUMENTO <i className="fa-solid fa-angles-right"></i>
                         </Button>
-                        <BotaoFluxoProcesso codigo="PE.01-1.2.1" />
                         <div style={{ clear: 'both' }}></div>
                     </>
                 ),
@@ -179,7 +188,6 @@ const areaDetails = {
                         >
                             VISUALIZAR DOCUMENTO <i className="fa-solid fa-angles-right"></i>
                         </Button>
-                        <BotaoFluxoProcesso codigo="PE.02-0.2" />
                         <div style={{ clear: 'both' }}></div>
                     </>
                 ),
@@ -201,7 +209,6 @@ const areaDetails = {
                         >
                             VISUALIZAR DOCUMENTO <i className="fa-solid fa-angles-right"></i>
                         </Button>
-                        <BotaoFluxoProcesso codigo="PE.02-0.3" />
                         <div style={{ clear: 'both' }}></div>
                     </>
                 ),
@@ -407,7 +414,7 @@ function SubareaSidebar({ subareas, subareaAtiva, onSelecionar, busca, onBuscaCh
                             {resultados.map((doc) => (
                                 <Accordion.Item key={doc.eventKey} eventKey={doc.eventKey} className="accordion-item-custom">
                                     <Accordion.Header>{doc.titulo} <span className="qualidade-busca-item-caminho" style={{ marginLeft: 10 }}>({doc.subareaNome})</span></Accordion.Header>
-                                    <Accordion.Body>{doc.corpo}</Accordion.Body>
+                                    <Accordion.Body><CorpoDocumento doc={doc} /></Accordion.Body>
                                 </Accordion.Item>
                             ))}
                         </Accordion>
@@ -419,7 +426,7 @@ function SubareaSidebar({ subareas, subareaAtiva, onSelecionar, busca, onBuscaCh
                         {sub.documentos.map((doc) => (
                             <Accordion.Item key={doc.eventKey} eventKey={doc.eventKey} className="accordion-item-custom">
                                 <Accordion.Header>{doc.titulo}</Accordion.Header>
-                                <Accordion.Body>{doc.corpo}</Accordion.Body>
+                                <Accordion.Body><CorpoDocumento doc={doc} /></Accordion.Body>
                             </Accordion.Item>
                         ))}
                     </Accordion>
@@ -477,7 +484,7 @@ function AreaDetail({ config, onVoltar, onHome }) {
                                     {documentosFiltrados.map((doc) => (
                                         <Accordion.Item key={doc.eventKey} eventKey={doc.eventKey} className="accordion-item-custom">
                                             <Accordion.Header>{doc.titulo}</Accordion.Header>
-                                            <Accordion.Body>{doc.corpo}</Accordion.Body>
+                                            <Accordion.Body><CorpoDocumento doc={doc} /></Accordion.Body>
                                         </Accordion.Item>
                                     ))}
                                 </Accordion>
