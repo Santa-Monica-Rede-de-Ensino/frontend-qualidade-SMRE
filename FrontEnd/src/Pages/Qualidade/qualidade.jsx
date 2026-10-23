@@ -228,6 +228,31 @@ const areaDetails = {
             },
         ],
     },
+    gente: {
+        titulo: 'GENTE & GESTÃO',
+        objetivo: (
+            <div className="qualidade-texto-politica">
+                <p>A área de Gente & Gestão tem por finalidade planejar, controlar e monitorar os processos relacionados à gestão de pessoas, assegurando o cumprimento da legislação aplicável, das diretrizes institucionais e das políticas internas, com vistas à atração, integração, desenvolvimento, retenção e administração dos colaboradores, contribuindo para o alcance dos objetivos estratégicos da Instituição.</p>
+                <p><strong>Suas atividades estão organizadas nas seguintes subáreas:</strong></p>
+                <ul>
+                    <li><strong>Administração de Pessoal:</strong> responsável pelos processos relacionados à admissão, movimentação, controle de jornada, folha de pagamento, desligamento e demais rotinas trabalhistas e previdenciárias.</li>
+                    <li><strong>Benefícios & Bem-Estar:</strong> responsável pela gestão dos benefícios corporativos e pela promoção de ações voltadas à saúde, qualidade de vida, segurança e bem-estar dos colaboradores.</li>
+                    <li><strong>Comunicação Interna:</strong> responsável pelo planejamento, divulgação e alinhamento das comunicações institucionais, fortalecendo o engajamento e a integração entre colaboradores e áreas da Instituição.</li>
+                    <li><strong>Operações CA:</strong> responsável pela gestão operacional dos processos administrativos vinculados à Central Administrativa (CA), assegurando suporte e atendimento às demandas internas.</li>
+                    <li><strong>Recrutamento, Estratégia e Arquivo:</strong> responsável pelos processos de recrutamento e seleção, planejamento estratégico de gestão de pessoas, gestão documental e manutenção dos arquivos físicos e digitais da área.</li>
+                </ul>
+            </div>
+        ),
+        organogramaSvg: 'gente-gestao.svg',
+        documentos: null,
+        subareas: [
+            { id: 'ps-01-1-administracao-de-pessoal', nome: 'PS.01-1 - Administração de Pessoal', documentos: [] },
+            { id: 'ps-01-2-beneficios-e-bem-estar', nome: 'PS.01-2 - Benefícios & Bem-Estar', documentos: [] },
+            { id: 'ps-01-3-comunicacao-interna', nome: 'PS.01-3 - Comunicação Interna', documentos: [] },
+            { id: 'ps-01-4-operacoes-ca', nome: 'PS.01-4 - Operações CA', documentos: [] },
+            { id: 'ps-01-5-recrutamento-estrategia-e-arquivo', nome: 'PS.01-5 - Recrutamento, Estratégia e Arquivo', documentos: [] },
+        ],
+    },
     ti: {
         titulo: 'TECNOLOGIA DA INFORMAÇÃO',
         objetivo: (
@@ -331,7 +356,7 @@ const areaDetails = {
 };
 
 Object.values(areaDetails).forEach((area) => {
-    area.documentos = ordenarPorTexto(area.documentos, (d) => d.titulo);
+    if (area.documentos) area.documentos = ordenarPorTexto(area.documentos, (d) => d.titulo);
     if (area.subareas) {
         // Subáreas mantêm a ordem em que foram declaradas; só os documentos são ordenados.
         area.subareas = area.subareas.map((sub) => ({
@@ -441,7 +466,7 @@ function AreaDetail({ config, onVoltar, onHome }) {
     const [buscaDocs, setBuscaDocs] = useState('');
     const [buscaSub, setBuscaSub] = useState('');
 
-    const documentosFiltrados = buscarPorTexto(config.documentos, (d) => d.titulo, buscaDocs);
+    const documentosFiltrados = buscarPorTexto(config.documentos || [], (d) => d.titulo, buscaDocs);
 
     const trilha = [{ label: 'Qualidade', onClick: onVoltar }, { label: config.titulo }];
 
@@ -474,23 +499,25 @@ function AreaDetail({ config, onVoltar, onHome }) {
                             <OrganogramaArea titulo={config.titulo} svg={config.organogramaSvg} />
                         </div>
                     </Tab>
-                    <Tab eventKey="documentos" title={<TabTitle icone="fa-file-lines" texto="DOCUMENTOS" />}>
-                        <div className="qualidade-tab-content">
-                            <BuscaDocumentos valor={buscaDocs} onChange={setBuscaDocs} placeholder="Pesquisar documento..." />
-                            {documentosFiltrados.length === 0 ? (
-                                <div className="qualidade-texto-politica">Nenhum documento encontrado.</div>
-                            ) : (
-                                <Accordion defaultActiveKey={config.defaultDocKey}>
-                                    {documentosFiltrados.map((doc) => (
-                                        <Accordion.Item key={doc.eventKey} eventKey={doc.eventKey} className="accordion-item-custom">
-                                            <Accordion.Header>{doc.titulo}</Accordion.Header>
-                                            <Accordion.Body><CorpoDocumento doc={doc} /></Accordion.Body>
-                                        </Accordion.Item>
-                                    ))}
-                                </Accordion>
-                            )}
-                        </div>
-                    </Tab>
+                    {config.documentos !== null && (
+                        <Tab eventKey="documentos" title={<TabTitle icone="fa-file-lines" texto="DOCUMENTOS" />}>
+                            <div className="qualidade-tab-content">
+                                <BuscaDocumentos valor={buscaDocs} onChange={setBuscaDocs} placeholder="Pesquisar documento..." />
+                                {documentosFiltrados.length === 0 ? (
+                                    <div className="qualidade-texto-politica">Nenhum documento encontrado.</div>
+                                ) : (
+                                    <Accordion defaultActiveKey={config.defaultDocKey}>
+                                        {documentosFiltrados.map((doc) => (
+                                            <Accordion.Item key={doc.eventKey} eventKey={doc.eventKey} className="accordion-item-custom">
+                                                <Accordion.Header>{doc.titulo}</Accordion.Header>
+                                                <Accordion.Body><CorpoDocumento doc={doc} /></Accordion.Body>
+                                            </Accordion.Item>
+                                        ))}
+                                    </Accordion>
+                                )}
+                            </div>
+                        </Tab>
+                    )}
                     {config.subareas !== null && (
                         <Tab eventKey="subareas" title={<TabTitle icone="fa-layer-group" texto="SUBÁREAS" />}>
                             <div className="qualidade-tab-content">
