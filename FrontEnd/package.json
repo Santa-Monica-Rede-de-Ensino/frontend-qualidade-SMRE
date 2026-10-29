@@ -38,7 +38,10 @@
     "deploy:tutorial-helpdesk": "npm run build:tutorial-helpdesk && gh-pages -d build -e tutorial-helpdesk",
     "start:tutorial-analise-desligamento": "cross-env REACT_APP_ALVO=tutorial-analise-desligamento react-scripts start",
     "build:tutorial-analise-desligamento": "cross-env REACT_APP_ALVO=tutorial-analise-desligamento PUBLIC_URL=/frontend-qualidade-SMRE/tutorial-analise-desligamento GENERATE_SOURCEMAP=false react-scripts build",
-    "deploy:tutorial-analise-desligamento": "npm run build:tutorial-analise-desligamento && gh-pages -d build -e tutorial-analise-desligamento"
+    "deploy:tutorial-analise-desligamento": "npm run build:tutorial-analise-desligamento && gh-pages -d build -e tutorial-analise-desligamento",
+    "start:tutorial-consulta-tickets": "cross-env REACT_APP_ALVO=tutorial-consulta-tickets react-scripts start",
+    "build:tutorial-consulta-tickets": "cross-env REACT_APP_ALVO=tutorial-consulta-tickets PUBLIC_URL=/frontend-qualidade-SMRE/tutorial-consulta-tickets GENERATE_SOURCEMAP=false react-scripts build",
+    "deploy:tutorial-consulta-tickets": "npm run build:tutorial-consulta-tickets && gh-pages -d build -e tutorial-consulta-tickets"
   },
   "eslintConfig": {
     "extends": [
