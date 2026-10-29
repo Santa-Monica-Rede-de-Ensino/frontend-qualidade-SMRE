@@ -47,7 +47,7 @@ export const FIM_FORMULARIO = [
 const NAV = {
     principal: { pc: [10.5, 12.5], cel: [5, 27], texto: 'Página Principal', Icone: House },
     novo: { pc: [24, 13.5], cel: [34, 29], texto: 'Abrir Novo Ticket', Icone: FilePlus },
-    tickets: { pc: [38.5, 9.5], cel: [66, 22], texto: 'Tickets (3)', Icone: FileText },
+    tickets: { pc: [38.5, 9.5], cel: [66, 22], texto: 'Tickets', Icone: FileText },
 };
 const BOTOES = {
     criar: { pc: [36, 9], cel: [5, 26], texto: 'Criar Ticket' },
@@ -69,6 +69,9 @@ const MEIO_DEDO = { x: 5.5, y: 3.1 };
 
 const chave = (cel) => (cel ? 'cel' : 'pc');
 const pct = (n) => `${n}%`;
+
+// Ponto (em % da cena) para onde a setinha vai; no celular, recuado para o centro do dedo.
+export const pontoCena = (x, y, cel) => (cel ? { x: pct(x - MEIO_DEDO.x), y: pct(y - MEIO_DEDO.y) } : { x: pct(x), y: pct(y) });
 const porTela = (par, cel) => (Array.isArray(par) ? par[cel ? 1 : 0] : par);
 
 // Dica em itálico acima do campo; dicaLinhas = [computador, celular] quando ela quebra.
@@ -138,7 +141,7 @@ function Campo({ l, valor, cel }) {
     }
 }
 
-function Linha({ l, valor, cel, ativo, aperta, className = '' }) {
+function Linha({ l, valor, cel, ativo, aperta, qtdTickets = 3, className = '' }) {
     const k = chave(cel);
     const classe = `h-linha${l.risco ? ' risco' : ''} ${className}`;
     const style = { top: pct(l.top), height: pct(l.h) };
@@ -149,7 +152,7 @@ function Linha({ l, valor, cel, ativo, aperta, className = '' }) {
                 <div className={`${classe} h-topo`} style={style}>
                     <img className="h-logo" src={LogoCsc} alt="" />
                     <span className="h-usuario">
-                        Leozinho Parente | <u>Perfil</u> | <u>Tickets <b>(3)</b></u> -<br /><u>Registrar Saída</u>
+                        Leozinho Parente | <u>Perfil</u> | <u>Tickets <b>({qtdTickets})</b></u> -<br /><u>Registrar Saída</u>
                     </span>
                 </div>
             );
@@ -163,7 +166,7 @@ function Linha({ l, valor, cel, ativo, aperta, className = '' }) {
                             className={id === ativo ? 'h-nav-item on' : 'h-nav-item'}
                             style={{ left: pct(pos[k][0]), width: pct(pos[k][1]) }}
                         >
-                            <Icone strokeWidth={1.8} />{texto}
+                            <Icone strokeWidth={1.8} />{id === 'tickets' ? `${texto} (${qtdTickets})` : texto}
                         </span>
                     ))}
                 </div>
@@ -255,6 +258,15 @@ export function passosIniciais({ TelaCsc, ListaCsc, alvo }, topico, listaTopicos
     ];
 }
 
+const CABECALHO = INICIO_FORMULARIO.slice(0, 2);
+
+// Logo, usuário e menu, para as telas do Suporte CSC que não são o formulário.
+export function CabecalhoCsc({ cel, ativo, qtdTickets }) {
+    return empilhar(CABECALHO, cel).map((l) => <Linha key={l.id} l={l} cel={cel} ativo={ativo} qtdTickets={qtdTickets} />);
+}
+
+export const alvoMenu = (id, cel) => formularioCsc(CABECALHO, {}).alvo(id, 0, cel);
+
 function empilhar(linhas, cel) {
     let topo = 0;
     return linhas.map((l) => {
@@ -307,7 +319,7 @@ export function formularioCsc(linhas, valores) {
         // Centro do campo da linha (ou do item do menu / botão), em % da cena.
         alvo(id, rolar, cel) {
             const { x, y } = centro(id, rolar, cel);
-            return cel ? { x: pct(x - MEIO_DEDO.x), y: pct(y - MEIO_DEDO.y) } : { x: pct(x), y: pct(y) };
+            return pontoCena(x, y, cel);
         },
 
         // Moldura da linha inteira, para marcar um texto (ex.: o título padrão).
