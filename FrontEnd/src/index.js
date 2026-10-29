@@ -12,7 +12,9 @@ const Raiz = process.env.REACT_APP_ALVO === "tutorial-termo"
     ? require("./Pages/Guia/TutorialHelpdesk").default
     : process.env.REACT_APP_ALVO === "tutorial-analise-desligamento"
       ? require("./Pages/Guia/TutorialAnaliseDesligamento").default
-      : require("./App").default;
+      : process.env.REACT_APP_ALVO === "tutorial-consulta-tickets"
+        ? require("./Pages/Guia/TutorialConsultaTickets").default
+        : require("./App").default;
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
