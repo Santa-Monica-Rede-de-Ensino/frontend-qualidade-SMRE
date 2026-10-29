@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/frontend-qualidade-SMRE/tutorial-consulta-tickets/static/css/main.650ae84f.css",
-    "main.js": "/frontend-qualidade-SMRE/tutorial-consulta-tickets/static/js/main.93eef962.js",
+    "main.js": "/frontend-qualidade-SMRE/tutorial-consulta-tickets/static/js/main.671c59b5.js",
     "static/js/27.04bd8310.chunk.js": "/frontend-qualidade-SMRE/tutorial-consulta-tickets/static/js/27.04bd8310.chunk.js",
     "static/media/SMRE_logo_negativo.png": "/frontend-qualidade-SMRE/tutorial-consulta-tickets/static/media/SMRE_logo_negativo.b4b54e646ce8d2d153b5.png",
     "static/media/csc-logo.png": "/frontend-qualidade-SMRE/tutorial-consulta-tickets/static/media/csc-logo.5b26b6e15697d8e3e72b.png",
@@ -9,6 +9,6 @@
   },
   "entrypoints": [
     "static/css/main.650ae84f.css",
-    "static/js/main.93eef962.js"
+    "static/js/main.671c59b5.js"
   ]
 }
