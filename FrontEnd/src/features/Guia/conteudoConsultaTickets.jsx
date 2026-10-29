@@ -85,7 +85,7 @@ export const TEMA_CONSULTA_TICKETS = {
             {
                 acao: 'Escolha o tópico de ajuda.',
                 expl: 'Neste exemplo, o tópico de ajuda selecionado é “TI - Sistemas”. O número apresentado indica que '
-                    + 'existem 15 tickets vinculados a esse tópico.',
+                    + 'existem 15 (quinze) tickets vinculados a esse tópico.',
                 ...ambos((cel) => (
                     <Video cel={cel} de={['60%', '90%']} para={alvoOpcao(TOPICOS.indexOf(TOPICO), cel)}>
                         <Tela fase="antes">
@@ -98,7 +98,7 @@ export const TEMA_CONSULTA_TICKETS = {
             },
             {
                 acao: 'Veja quantos tickets estão em aberto e encerrados.',
-                expl: 'Neste exemplo, dos 15 tickets existentes, 6 estão em aberto e 9 estão encerrados. Você pode '
+                expl: 'Neste exemplo, dos 15 (quinze) tickets existentes, 6 (seis) estão em aberto e 9 (nove) estão encerrados. Você pode '
                     + 'visualizar essas informações acima da lista, no lado direito da tela.',
                 ...ambos((cel) => (
                     <Video cel={cel} de={['40%', '85%']} para={alvoContagem(cel)} semClique>
