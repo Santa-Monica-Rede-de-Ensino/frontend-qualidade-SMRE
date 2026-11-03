@@ -7,11 +7,11 @@ import reportWebVitals from "./reportWebVitals";
 // require no ternário comparando process.env direto: o webpack descarta o ramo não usado e a build
 // do tutorial não leva o Portal. Com uma variável no meio, ele não descarta.
 const Raiz = process.env.REACT_APP_ALVO === "tutorial-termo"
-  ? require("./Pages/Guia/TutorialTermo").default
+  ? require("./features/Guia/TutorialTermo").default
   : process.env.REACT_APP_ALVO === "tutorial-helpdesk"
-    ? require("./Pages/Guia/TutorialHelpdesk").default
+    ? require("./features/Guia/TutorialHelpdesk").default
     : process.env.REACT_APP_ALVO === "tutorial-analise-desligamento"
-      ? require("./Pages/Guia/TutorialAnaliseDesligamento").default
+      ? require("./features/Guia/TutorialAnaliseDesligamento").default
       : require("./App").default;
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
