@@ -9,22 +9,22 @@ import {
     useLocation
 } from "react-router-dom";
 
-import LoginPage from './Pages/LoginPage';
-import ChatButton from './Pages/Components/ChatButton';
-import HomePage from './Pages/HomePage/index.jsx';
-import EnviaReset from './Pages/LoginPage/enviaReset.jsx';
-import ResetSenha from './Pages/Usuarios/resetsenha.jsx';
-import UploadCC from './Pages/uploadCC/uploadCC.jsx';
-import UploadGPT from './Pages/uploadCC/uploadGPT.jsx';
-import ContaDocs from './Pages/uploadCC/contaDocs.jsx';
-import ListaDocs from "./Pages/uploadCC/listaDocs";
-import Qualidade from "./Pages/Qualidade/qualidade";
-import UploadGPTFotos from "./Pages/uploadCC/uploadGPTFotos.jsx";
-import ContraCheque from "./Pages/HomePage/contra_cheque.jsx";
-import Ramais from "./Pages/Ramais/ramais.jsx";
-import Aniversariantes from "./Pages/Aniversariantes/aniversariantes.jsx";
-import EmConstrucao from "./Pages/EmConstrucao/emConstrucao.jsx";
-import Guia from "./Pages/Guia/guia.jsx";
+import LoginPage from './features/LoginPage';
+import ChatButton from './features/chat/ChatButton';
+import HomePage from './features/HomePage/index.jsx';
+import EnviaReset from './features/LoginPage/enviaReset.jsx';
+import ResetSenha from './features/Usuarios/resetsenha.jsx';
+import UploadCC from './features/uploadCC/uploadCC.jsx';
+import UploadGPT from './features/uploadCC/uploadGPT.jsx';
+import ContaDocs from './features/uploadCC/contaDocs.jsx';
+import ListaDocs from "./features/uploadCC/listaDocs";
+import Qualidade from "./features/Qualidade/qualidade";
+import UploadGPTFotos from "./features/uploadCC/uploadGPTFotos.jsx";
+import ContraCheque from "./features/HomePage/contra_cheque.jsx";
+import Ramais from "./features/Ramais/ramais.jsx";
+import Aniversariantes from "./features/Aniversariantes/aniversariantes.jsx";
+import EmConstrucao from "./features/EmConstrucao/emConstrucao.jsx";
+import Guia from "./features/Guia/guia.jsx";
 import { emProducao } from "./config/fase";
 
 import { ToastContainer } from "react-toastify";

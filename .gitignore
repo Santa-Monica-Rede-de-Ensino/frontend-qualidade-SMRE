@@ -29,3 +29,6 @@ Thumbs.db
 *.njsproj
 *.sln
 *.sw?
+
+# PDFs de trabalho soltos na raiz do FrontEnd (os servidos ficam em FrontEnd/public/)
+/FrontEnd/*.pdf

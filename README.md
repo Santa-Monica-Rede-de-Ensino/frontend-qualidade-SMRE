@@ -23,6 +23,23 @@ Abra http://localhost:3000/frontend-qualidade-SMRE/. O caminho vem do `homepage`
 > **Atenção:** o ambiente local e o beta usam o backend de produção. Login, upload e cadastro
 > mexem em dados reais.
 
+## Estrutura
+
+```
+FrontEnd/
+  public/            arquivos servidos como estão (PDFs da Qualidade, organograma)
+  src/
+    features/<tela>/ tudo de uma tela: Guia, HomePage, Qualidade, Ramais, chat...
+    shared/
+      components/    o que duas ou mais telas usam (menu, rodapé, atalhos)
+      lib/           funções soltas usadas por mais de uma tela
+    AppRoutes.jsx    junta as telas nas rotas
+mockups/             HTMLs de decisão visual, fora do build
+```
+
+Arquivo de uma tela só fica na pasta dela; usado por duas ou mais, sobe para `shared/`. O `shared`
+não importa nada de `features`.
+
 ## Configuração
 
 | Variável | Para que |
@@ -56,7 +73,7 @@ https://santa-monica-rede-de-ensino.github.io/frontend-qualidade-SMRE/. Rode na 
 | `npm run deploy:tutorial-helpdesk` | `/tutorial-helpdesk/` | Tutorial do ticket de Desligamento e Contratação no Suporte CSC, sem login |
 | `npm run deploy:tutorial-analise-desligamento` | `/tutorial-analise-desligamento/` | Tutorial do ticket de Análise de Desligamento no Suporte CSC, sem login |
 
-Os tutoriais usam os arquivos do Guia (`src/Pages/Guia/conteudo*.jsx`), e cada endereço só muda
+Os tutoriais usam os arquivos do Guia (`src/features/Guia/conteudo*.jsx`), e cada endereço só muda
 depois do seu próprio deploy. Para ver um tutorial na máquina: `npm run start:tutorial-<nome>`. Os
 tutoriais do Suporte CSC dividem as telas em `telasHelpdesk.jsx`; cada tópico tem seu `conteudo*.jsx`.
 
